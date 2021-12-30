@@ -36,7 +36,8 @@ public class ElectronicBracelet {
 
 
     public ArrayList getKidInformation() {
-        int ID = Integer.parseInt(kid.getID());
+        int ID = Integer.parseInt(kid.getID()); // change to int from str
+        //String ID = kid.getID();
         int height = kid.getHeight();
         int weight = kid.getWeight();
         int age = kid.getAge();

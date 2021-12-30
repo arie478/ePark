@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -5,7 +6,8 @@ import java.util.Map;
 public class Guardian
 {
     // Attributes
-    private String creditCard;
+    //private String creditCard;
+    private int creditCard;
     private int topLimit;
     private Map<String, String> allPasswards;
 
@@ -19,7 +21,7 @@ public class Guardian
      * @param newCreditCard - String representing the credit card number of the guardian
      * @param newTopLimit - Int representing the credit limit for the guardian's credit card
      */
-    public Guardian(String newCreditCard, int newTopLimit)
+    public Guardian(int newCreditCard, int newTopLimit)
     {
         creditCard = newCreditCard;
         topLimit = newTopLimit;
@@ -45,12 +47,15 @@ public class Guardian
     }
 
     /**
-     * Returns the credit card number
-     * @return - String representing the credit card number
+     * Returns the credit info
+     * @return - [creditCard,topLimit]
      */
-    public String getCreditInfo()
+    public ArrayList<Integer> getCreditInfo()
     {
-        return creditCard;
+        ArrayList<Integer> cardInfo = new ArrayList<>();
+        cardInfo.add(creditCard);
+        cardInfo.add(topLimit);
+        return cardInfo;
     }
 
     public void requestElectronicBracletFromChild(String kidId)

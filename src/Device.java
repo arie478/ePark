@@ -1,10 +1,12 @@
+import java.util.ArrayList;
+
 public class Device
 {
     // Attributes
     private String name;
     private Boolean isExtreme;
     private Boolean isWorking;
-    private int[] restrictions;
+    private ArrayList<Integer> restrictions;
     private int price;
 
     // Attributes from association
@@ -18,7 +20,7 @@ public class Device
      * @param newPrice - Int representing the price of the device entry
      * @param newSystemManager - SystemManager object representing the system of the E-Park the device belongs to
      */
-    public Device(String newName, Boolean newIsExtreme, int[] newRestrictions, int newPrice, SystemManager newSystemManager)
+    public Device(String newName, Boolean newIsExtreme, ArrayList<Integer> newRestrictions, int newPrice, SystemManager newSystemManager)
     {
         name = newName;
         isExtreme = newIsExtreme;
@@ -79,10 +81,11 @@ public class Device
      * Order is : [0] = weight, [1] = height, [2] = age
      * @return - boolean if the child is allowed on the device or not
      */
-    public Boolean checkIfAllowed(int[] kidMeasurements)
+    public Boolean checkIfAllowed(ArrayList<Integer> kidMeasurements)
     {
         // Check if weight is under limit, height and age are above limit
-        return kidMeasurements[0] <= restrictions[0] && kidMeasurements[1] >= restrictions[1] && kidMeasurements[2] >= restrictions[2];
+        // TODO: check the parameter
+        return kidMeasurements.get(0) <= restrictions.get(0) && kidMeasurements.get(1) >= restrictions.get(1) && kidMeasurements.get(2) >= restrictions.get(2);
     }
 
 }

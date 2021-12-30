@@ -8,6 +8,9 @@ public class eTicket {
 
     Hashtable<String, Integer> my_dict; //new Hashtable<String, Integer>()
 
+    ArrayList<Device> devices;
+
+
     public eTicket(String password, ElectronicBracelet electronicBracelet, SystemManager systemManager, ArrayList<Device> deviceList, Hashtable<String, Integer> my_dict) {
         this.password = password;
         this.electronicBracelet = electronicBracelet;
@@ -44,7 +47,7 @@ public class eTicket {
         ArrayList arr = electronicBracelet.getKidInformation();
         return arr;
     }
-    public void addEntry(ArrayList<Device> list){
+    public void addEntries(ArrayList<Device> list){
         for (Device device : list)
         {
             if(!my_dict.containsKey(device.getName())){
@@ -56,7 +59,7 @@ public class eTicket {
             }
         }
     }
-    public void removeEntry(ArrayList<Device> list){
+    public void removeEntries(ArrayList<Device> list){
         for (Device device : list)
         {
             if(!my_dict.containsKey(device.getName())){
@@ -75,5 +78,9 @@ public class eTicket {
     public void printMap()
     {
         System.out.println(my_dict);
+    }
+
+    public String getKidId(){ //TODO: check if needed
+        return String.valueOf(getKidInformation().get(0));
     }
 }

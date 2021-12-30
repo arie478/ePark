@@ -1,10 +1,11 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Account
 {
     // Attributes
-    private Map<String, Integer> totalPurchases;
+    private Map<String, Integer> totalPurchases; //TODO:
 
     // Attributes from association
     private SystemManager systemManager;
@@ -60,4 +61,14 @@ public class Account
         totalPurchases.remove(kidId);
     }
 
+    public void addEntries(ArrayList<Device> devices){
+        // TODO: check & implement
+    }
+    public void removeEntries(ArrayList<Device> devices){
+        // TODO: check & implement
+    }
+
+    public Guardian getGuardian(){
+        return guardian;
+    }
 }
