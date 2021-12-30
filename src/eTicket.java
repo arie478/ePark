@@ -6,16 +6,16 @@ public class eTicket {
     private ElectronicBracelet electronicBracelet;
     private SystemManager systemManager;
 
-    Hashtable<String, Integer> my_dict; //new Hashtable<String, Integer>()
+    Hashtable<Device, Integer> my_dict; //new Hashtable<String, Integer>()
 
     ArrayList<Device> devices;
 
 
-    public eTicket(String password, ElectronicBracelet electronicBracelet, SystemManager systemManager, ArrayList<Device> deviceList, Hashtable<String, Integer> my_dict) {
+    public eTicket(String password, ElectronicBracelet electronicBracelet, SystemManager systemManager, ArrayList<Device> deviceList) {
         this.password = password;
         this.electronicBracelet = electronicBracelet;
         this.systemManager = systemManager;
-        this.my_dict = my_dict;
+        this.my_dict = new Hashtable<Device, Integer>();
     }
 
     public SystemManager getSystemManager() {
@@ -50,29 +50,29 @@ public class eTicket {
     public void addEntries(ArrayList<Device> list){
         for (Device device : list)
         {
-            if(!my_dict.containsKey(device.getName())){
-                my_dict.put(device.getName(),1);
+            if(!my_dict.containsKey(device)){
+                my_dict.put(device,1);
             }
             else {
-                int previous_value = my_dict.get(device.getName());
-                my_dict.put(device.getName(), previous_value + 1);
+                int previous_value = my_dict.get(device);
+                my_dict.put(device, previous_value + 1);
             }
         }
     }
     public void removeEntries(ArrayList<Device> list){
         for (Device device : list)
         {
-            if(!my_dict.containsKey(device.getName())){
+            if(!my_dict.containsKey(device)){
                 System.out.println("There is no such ride as: " +  device.getName() + " in our system");
                 continue;
             }
-            int previous_value = my_dict.get(device.getName());
+            int previous_value = my_dict.get(device);
             if(previous_value == 0)
             {
-                System.out.println("No rides left on device: " +  device.getName());
+                System.out.println("No rides left on device: " +  device);
                 continue;
             }
-            my_dict.put(device.getName(),previous_value- 1);
+            my_dict.put(device,previous_value- 1);
         }
     }
     public void printMap()
@@ -82,5 +82,9 @@ public class eTicket {
 
     public String getKidId(){ //TODO: check if needed
         return String.valueOf(getKidInformation().get(0));
+    }
+
+    public Hashtable<Device, Integer> getEntriesDictionary() {
+        return my_dict;
     }
 }

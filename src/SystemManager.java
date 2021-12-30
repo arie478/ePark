@@ -1,5 +1,6 @@
 import java.security.spec.RSAOtherPrimeInfo;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -14,65 +15,98 @@ public class SystemManager {
         return getAllowedDevices(kid_id);
     }
 
-    private ArrayList<Device> getAllowedDevices(String kid_id){
+
+    /**
+     * checks the allowed devices based on the kid's personal information
+     */
+    public ArrayList<Device> getAllowedDevices(String kid_id) {
         eTicket ticket = getTicketFromId(kid_id);
-        //int[] info = ticket.getPersonalInfo();
         ArrayList info = ticket.getKidInformation();
         ArrayList<Device> allowedDevices = new ArrayList<>();
-        for (Device device: allDevices){
-            if (device.checkIfAllowed(info)){
+        for (Device device : allDevices) {
+            if (device.checkIfAllowed(info)) {
                 allowedDevices.add(device);
             }
         }
         return allowedDevices;
     }
 
-    public ArrayList<Device> addEntryToTicketForDevices(String kidID, ArrayList<Device> selectedDevices) {
+
+    /**
+     * checks if extreme devices were chosen
+     */
+    public ArrayList<Device> addEntryToTicketForDevices(String kidID, ArrayList<Device> selectedDevices, Account account) {
         ArrayList<Device> extremeDevices = new ArrayList<>();
-        for (Device device: selectedDevices){
-            if (checkIfExtreme(device)){
+        for (Device device : selectedDevices) {
+            if (checkIfExtreme(device)) {
                 extremeDevices.add(device);
             }
         }
-        return extremeDevices;
+        if (extremeDevices.size() != 0) {
+            return extremeDevices;
+        }
+        // there are no extreme devices
+        addApprovedDevices(kidID, selectedDevices, account);
+        return null;
     }
 
-    public void addApprovedDevices(String kid_id, ArrayList<Device> devices, Account account){
+
+    /**
+     * adding entry to the approved devices
+     */
+    public void addApprovedDevices(String kid_id, ArrayList<Device> devices, Account account) {
         eTicket ticket = getTicketFromId(kid_id);
         ticket.addEntries(devices);
         account.addEntries(devices);
     }
 
-//    public void askForApproval(extremeDevices){
-//
-//    }
 
-    public void removeEntryFromDevices(String kid_id, ArrayList<Device> devices, Account account){
+    /**
+     * removing entry from devices
+     */
+    public void removeEntryFromDevices(String kid_id, ArrayList<Device> devices, Account account) {
         eTicket ticket = getTicketFromId(kid_id);
         ticket.removeEntries(devices);
         account.removeEntries(devices);
     }
 
-    public boolean checkIfExtreme(Device device){
+
+    /**
+     * checks if the given device is extreme
+     */
+    public boolean checkIfExtreme(Device device) {
         return device.getIsExtreme();
     }
 
 
-
-    private eTicket getTicketFromId(String kid_id)
-    {
-        return null; // TODO: implement
+    /**
+     * returns the entry dictionary
+     */
+    public Hashtable<Device, Integer> getEntries(String kidID) {
+        eTicket ticket = getTicketFromId(kidID);
+        return ticket.getEntriesDictionary();
     }
 
-    public boolean isValidCredit(Integer creditCardNum, Integer topLimit){
+    /**
+     * getting eTicket object from the eTicket list
+     */
+    private eTicket getTicketFromId(String kid_id) {
+        for (eTicket ticket: allETickets){
+            if(Objects.equals(ticket.getKidId(), kid_id)){
+                return ticket;
+            }
+        }
+        return null;
+    }
+
+    public boolean isValidCredit(Integer creditCardNum, Integer topLimit) {
         System.out.println("Sending credit info to credit company...");
         System.out.println("Checking credit info....");
         System.out.println(".......................................99%");
-        boolean ans =creditCardNum != null && topLimit != null;
-        if(ans){
+        boolean ans = creditCardNum != null && topLimit != null;
+        if (ans) {
             System.out.println("- Credit info was verified successfully -");
-        }
-        else{
+        } else {
             System.out.println("- Credit info was not verified -");
         }
         return ans;
@@ -84,12 +118,12 @@ public class SystemManager {
      * @param kidID
      * @return ArrayList<Integer> in the form: [ammount , creditcard, topLimit]
      */
-    public ArrayList<Integer> getAmountAndCreditCard(Guardian guard, String kidID){
+    public ArrayList<Integer> getAmountAndCreditCard(Guardian guard, String kidID) {
 
         int ammount = 0;
-        for (Account account:
-             allAccounts) {
-            if (account.getGuardian() == guard){
+        for (Account account :
+                allAccounts) {
+            if (account.getGuardian() == guard) {
                 ammount = account.getBalance(kidID);
             }
         }
@@ -104,28 +138,30 @@ public class SystemManager {
      * @param guardian
      * @return guard's account if guardian not null, else returns null
      */
-    public Account create_gAccount(Guardian guardian){
-        if (guardian!=null){
-            return new Account(this,guardian);
+    public Account create_gAccount(Guardian guardian) {
+        if (guardian != null) {
+            return new Account(this, guardian);
         }
         return null;
     }
 
 
-    public eTicket create_eTicket(){
+    public eTicket create_eTicket() {
         // TODO: implement
         return null;
     }
 
-    public void deleteEticket(eTicket eTicket){
+    public void deleteEticket(eTicket eTicket) {
         allETickets.remove(eTicket);
         //TODO: check if more actions needed
 
     }
 
-    public void pay(int amount, ArrayList<Integer>cardDetails){
-        System.out.println("Total amount to pay is: "+amount);
+    public void pay(int amount, ArrayList<Integer> cardDetails) {
+        System.out.println("Total amount to pay is: " + amount);
         System.out.println("processing......");
         System.out.println("--- Payment accepted ---");
     }
+
+
 }
