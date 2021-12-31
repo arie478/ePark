@@ -126,6 +126,19 @@ public class SystemManager {
         return false;
     }
 
+    /**
+     * Prints the ticket's details
+     * @param kid_id - String representing the kid's Id
+     */
+    public void showTicket(String kid_id)
+    {
+        eTicket ticket = getTicketFromId(kid_id);
+        if (ticket != null)
+        {
+            ticket.printMap();
+        }
+    }
+
 
     public boolean isValidCredit(Integer creditCardNum, Integer topLimit) {
         System.out.println("Sending credit info to credit company...");
