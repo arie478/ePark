@@ -80,7 +80,9 @@ public class eTicket {
     }
     public void printMap()
     {
-        System.out.println(my_dict);
+        my_dict.entrySet().forEach(entry -> {
+            System.out.println("Device : " + entry.getKey().getName() + ", number of entries remaining : " + entry.getValue());
+        });
     }
 
     public String getKidId(){ //TODO: check if needed

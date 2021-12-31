@@ -42,13 +42,23 @@ public class Main
                     String kidAge = myObj.nextLine();
                     System.out.println("checking details...\n");
                     Kid newKid = fill_SignupForm(kidName, Integer.parseInt(kidAge), guardian);
+                    if(newKid==null)
+                    {
+                        break;
+                    }
                     System.out.println("Please enter your creditCard number:\n");
                     String creditCard = myObj.nextLine();
                     System.out.println("Please enter your topLimit:\n");
                     String topLimit = myObj.nextLine();
                     System.out.println("checking details...\n");
                     creditInfo(Integer.parseInt(creditCard), Integer.parseInt(topLimit));
-                    systemManager.create_gAccount(guardian); //TODO: needs to be static?
+                    //systemManager.create_gAccount(guardian); //TODO: needs to be static?
+
+                    if (account == null)
+                    {
+                        account = new Account(systemManager, guardian);
+                    }
+
                     systemManager.setKidID(newKid);
                     ElectronicBracelet newElectronicBracelet = systemManager.create_electronicBracelet();
                     String password = systemManager.getNewPassword(guardian);
@@ -90,7 +100,8 @@ public class Main
 
                     if (systemManager.connectToTicket(kidId, password))
                     {
-                        System.out.printf("Successfully connected to %s's ticket", kidId);
+                        System.out.printf("Successfully connected to %s's ticket\n", kidId);
+                        systemManager.showTicket(kidId);
                     } else
                     {
                         System.out.printf("Wrong password for %s's ticket", kidId);
@@ -357,8 +368,6 @@ public class Main
     {
         SystemManager systemManager1 = new SystemManager();
         Guardian guardian1 = new Guardian();
-        Account account1 = new Account(systemManager, guardian1);
-        account = account1;
         systemObjects = new ArrayList<>();
         systemObjects.add(systemManager);
         systemObjects.add(guardian);
