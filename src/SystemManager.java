@@ -110,6 +110,23 @@ public class SystemManager {
         return null;
     }
 
+    /**
+     * Try to connect to the ticket with given password
+     * @param kid_id - String representing the kid's Id
+     * @param password - String representing the kid's password
+     * @return - Boolean if the password given is the password of the ticket
+     */
+    public Boolean connectToTicket(String kid_id, String password)
+    {
+        eTicket ticket = getTicketFromId(kid_id);
+        if (ticket != null)
+        {
+            return ticket.getPassword().equals(password);
+        }
+        return false;
+    }
+
+
     public boolean isValidCredit(Integer creditCardNum, Integer topLimit) {
         System.out.println("Sending credit info to credit company...");
         System.out.println("Checking credit info....");

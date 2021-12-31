@@ -49,6 +49,7 @@ public class Main
                     ElectronicBracelet newElectronicBracelet = systemManager.create_electronicBracelet();
                     String password = systemManager.getNewPassword(guardian);
                     guardian.addKidPassward(newKid.getID(),password);
+                    System.out.println("Your id is: "+ newKid.getID());
                     System.out.println("Your password is: "+ password);
                     eTicket ticket = systemManager.create_eTicket(password, newElectronicBracelet, systemManager);
                     ticket.setElectronicBracelet(newElectronicBracelet);
@@ -63,6 +64,37 @@ public class Main
                     System.out.println(kidName + " was successfully registered !");
                     break;
                 }
+
+                /**
+                 * Manage ticket
+                 */
+                case "2":
+                {
+                    System.out.println("Please enter your kid's id:\n");
+                    String kidId = myObj.nextLine();
+
+                    // checking if the kid exist
+                    if (!systemManager.checkForKid(kidId))
+                    {
+                        System.out.println("there's no kid register with that id." +
+                                "you can register you kid by pressing 1");
+                        break;
+                    }
+
+                    System.out.println("Please enter password:\n");
+                    String password = myObj.nextLine();
+
+                    if (systemManager.connectToTicket(kidId, password))
+                    {
+                        System.out.printf("Successfully connected to %s's ticket",kidId);
+                    }
+                    else
+                    {
+                        System.out.printf("Wrong password for %s's ticket",kidId);
+                    }
+
+                }
+
                 case "Add ride":
                 case "3":
                 {
