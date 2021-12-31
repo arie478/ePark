@@ -222,17 +222,21 @@ public class Main
 
     public static Kid fill_SignupForm(String name, int age, Guardian guard)
     {
-        if (name != null && age != 0)
-        {
-            Kid kid = guard.createKid(age, name);
-            return kid;
+        if(name!=null && age!=0) {
+            if (age > 0 && !name.isEmpty()) {
+                Kid kid = guard.createKid(age, name);
+                return kid;
+            } else if (age <= 0) {
+                System.out.println("please try to register again with valid age\n");
+                return null;
+            } else if (name.isEmpty()) {
+                System.out.println("please try to register again with valid name\n");
+                return null;
+            }
         }
-        //TODO: if not ok?
-        return null;
     }
 
-    public static void creditInfo(int creditCard1, int topLimit1)
-    {
+    public static void creditInfo(int creditCard1, int topLimit1){
         systemManager.isValidCredit(creditCard1, topLimit1);
         guardian.setCreditCard(creditCard1);
         guardian.setTopLimit(topLimit1);
