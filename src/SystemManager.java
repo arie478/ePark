@@ -180,6 +180,7 @@ public class SystemManager {
 
     public eTicket create_eTicket(String password, ElectronicBracelet electronicBracelet, SystemManager systemManager) {
         eTicket ticket = new eTicket(password, electronicBracelet, systemManager);
+        allETickets.add(ticket);
         return ticket;
     }
 
@@ -229,6 +230,10 @@ public class SystemManager {
     public void connectToGuard(Guardian guardian) {
         this.allGuards.add(guardian);
 
+    }
+
+    public void addDevice(String name,Boolean isExtreme, ArrayList<Integer> restrictions, int price) {
+        allDevices.add(new Device(name, isExtreme, restrictions, price, this));
     }
 
     public String getNewPassword(Guardian guardian) {

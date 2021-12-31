@@ -42,6 +42,9 @@ public class eTicket {
         this.password = password;
     }
 
+    public String getId(){
+        return electronicBracelet.getKid().getID();
+    }
 
     public ArrayList getKidInformation(){
         ArrayList arr = electronicBracelet.getKidInformation();
@@ -81,7 +84,7 @@ public class eTicket {
     }
 
     public String getKidId(){ //TODO: check if needed
-        return String.valueOf(getKidInformation().get(0));
+        return electronicBracelet.getKid().getID();
     }
 
     public Hashtable<Device, Integer> getEntriesDictionary() {

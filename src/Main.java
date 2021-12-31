@@ -5,12 +5,15 @@ public class Main
 
     private static SystemManager systemManager;
     private static Guardian guardian;
+    private static Account account;
 
     public static List<Object> systemObjects; //TODO: add/remove all objects to list
 
 
-    public static void getUSerInput()
-    {
+    public static void getUSerInput() {
+
+        addDefaultDevices();
+
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
 
         String choice;
@@ -49,7 +52,6 @@ public class Main
                     ElectronicBracelet newElectronicBracelet = systemManager.create_electronicBracelet();
                     String password = systemManager.getNewPassword(guardian);
                     guardian.addKidPassward(newKid.getID(),password);
-                    System.out.println("Your id is: "+ newKid.getID());
                     System.out.println("Your password is: "+ password);
                     eTicket ticket = systemManager.create_eTicket(password, newElectronicBracelet, systemManager);
                     ticket.setElectronicBracelet(newElectronicBracelet);
@@ -64,48 +66,15 @@ public class Main
                     System.out.println(kidName + " was successfully registered !");
                     break;
                 }
-
-                /**
-                 * Manage ticket
-                 */
-                case "2":
-                {
-                    System.out.println("Please enter your kid's id:\n");
-                    String kidId = myObj.nextLine();
-
-                    // checking if the kid exist
-                    if (!systemManager.checkForKid(kidId))
-                    {
-                        System.out.println("there's no kid register with that id." +
-                                "you can register you kid by pressing 1");
-                        break;
-                    }
-
-                    System.out.println("Please enter password:\n");
-                    String password = myObj.nextLine();
-
-                    if (systemManager.connectToTicket(kidId, password))
-                    {
-                        System.out.printf("Successfully connected to %s's ticket",kidId);
-                    }
-                    else
-                    {
-                        System.out.printf("Wrong password for %s's ticket",kidId);
-                    }
-
-                }
-
                 case "Add ride":
-                case "3":
-                {
+                case "3": {
                     myObj = new Scanner(System.in);
                     System.out.println("please enter the kid's id that you wish to add ride to");
                     String kidID = myObj.nextLine();
 
                     // checking if the kid exist
                     Boolean kidRegistered = systemManager.checkForKid(kidID);
-                    if (!kidRegistered)
-                    {
+                    if (!kidRegistered) {
                         System.out.println("there's no kid register with that id." +
                                 "you can register you kid by pressing 1");
                         break;
@@ -115,8 +84,7 @@ public class Main
                     ArrayList<Device> allowedDevices = systemManager.getAllowedDevices(kidID);
 
                     ArrayList<Device> selectedDevices = new ArrayList<>();
-                    if (allowedDevices == null)
-                    {
+                    if (allowedDevices == null) {
                         System.out.println("there are no devices suitable for you kid");
                         break;
                     }
@@ -128,66 +96,70 @@ public class Main
                     );
 
                     // selecting devices
-                    while (true)
-                    {
+                    while (true) {
                         // print names
-                        for (Device device : allowedDevices)
-                        {
-                            System.out.println("device: " + device.getName() + " price: " + device.getPrice());
+                        for (Device device : allowedDevices) {
+                            System.out.println("device: " + device.getName() + " | price: " + device.getPrice());
                         }
 
                         // choice
                         String device_choice = myObj.nextLine();
 
                         // checking if they want to finish
-                        if (Objects.equals(device_choice, "i'm done") || Objects.equals(device_choice, "0"))
-                        {
+                        if (Objects.equals(device_choice, "i'm done") || Objects.equals(device_choice, "0")) {
                             break;
                         }
 
                         Boolean isDevice = false;
+                        Boolean printFinalMessage = true;
                         // checking if the answer matches a device
-                        for (Device device : allowedDevices)
-                        {
-                            if (Objects.equals(device.getName(), device_choice))
+                        for (Device device : allowedDevices) {
+                            if (device.getName().equalsIgnoreCase(device_choice.toLowerCase(Locale.ROOT)))
+//                            if (Objects.equalsIgnoreCase(device.getName(), device_choice.))
                             {
                                 isDevice = true;
                                 // the device has been chosen already
-                                if (selectedDevices.contains(device))
-                                {
-                                    System.out.println("the deceive has already been selected");
+                                if (selectedDevices.contains(device)) {
+                                    String msg = device_choice + " has already been selected";
+                                    System.out.println(msg);
+                                    printFinalMessage = false;
+                                    continue;
+
                                 }
                                 selectedDevices.add(device);
                             }
                         }
-                        if (!isDevice)
-                        {
-                            System.out.println("we couldn't recognize the device. please look at the list, or check your spelling");
+                        if (printFinalMessage) {
+                            if (!isDevice) {
+                                System.out.println("we couldn't recognize the device. please look at the list, or check your spelling");
+                            } else {
+                                String msg = device_choice + " has been added to your selected rides";
+                                System.out.println(msg);
+                            }
                         }
                     }
 
                     // checking if the devices are extreme
-                    ArrayList<Device> extremeDevices = systemManager.addEntryToTicketForDevices(kidID, selectedDevices, guardian.getAccount());
-                    if (extremeDevices != null)
-                    {
+                    ArrayList<Device> extremeDevices = systemManager.addEntryToTicketForDevices(kidID, selectedDevices, account);
+                    if (extremeDevices != null) {
                         ArrayList<Device> approvedDevice = new ArrayList<>();
                         System.out.println("for each extreme device- please enter yes if you approve");
-                        for (Device device : extremeDevices)
-                        {
+                        for (Device device : extremeDevices) {
                             System.out.println(device.getName());
                             String answer = myObj.nextLine();
-                            if (Objects.equals(answer, "yes"))
-                            {
+                            if (Objects.equals(answer, "yes")) {
                                 approvedDevice.add(device);
+                                System.out.println("entry has been added to " + device.getName());
                             }
                         }
-                        systemManager.addApprovedDevices(kidID, approvedDevice, guardian.getAccount());
+                        systemManager.addApprovedDevices(kidID, approvedDevice, account);
+                        break;
+
                     }
                 }
 
                 case "Remove ride":
-                case "4":
-                {
+                case "4": {
                     System.out.println("please enter the kid's id that you wish to remove ride from");
                     String kidID = myObj.nextLine();
 
@@ -199,27 +171,34 @@ public class Main
                             "write 'i'm done' or 0 when you're done choosing"
                     );
                     ArrayList<Device> selectedDevices = new ArrayList<>();
+                    while (true) {
 
-                    // get the entries dictionary
-                    for (Map.Entry<Device, Integer> entry : entries.entrySet())
-                    {
-                        String mes = entry.getKey().getName() + " number of entries: " + entry.getValue();
-                        System.out.println(mes);
-                    }
+                        // get the entries dictionary
+                        for (Map.Entry<Device, Integer> entry : entries.entrySet()) {
+                            String mes = entry.getKey().getName() + " number of entries: " + entry.getValue();
+                            System.out.println(mes);
+                        }
 
-                    String device_choice = myObj.nextLine();
-                    while (!(Objects.equals(device_choice, "i'm done") || Objects.equals(device_choice, "0")))
-                    {
-                        for (Device device : entries.keySet())
-                        {
+                        String device_choice = myObj.nextLine();
+                        if (Objects.equals(device_choice, "i'm done") || Objects.equals(device_choice, "0")) {
+                            break;
+                        }
+
+                        for (Device device : entries.keySet()) {
                             // wanting to remove said device
-                            if (Objects.equals(device_choice, device.getName()))
-                            {
+                            if (device.getName().equalsIgnoreCase(device_choice.toLowerCase(Locale.ROOT))) {
                                 selectedDevices.add(device);
+                                System.out.println("entry has been remove from " + device.getName());
+                                systemManager.removeEntryFromDevices(kidID, selectedDevices, account);
+                                selectedDevices = new ArrayList<>();
                             }
                         }
+                        device_choice = null;
+//                        entries = systemManager.getEntries(kidID);
+//                        if ()
                     }
-                    systemManager.removeEntryFromDevices(kidID, selectedDevices, guardian.getAccount());
+
+                    break;
                 }
 
                 case "Exit park":
@@ -246,8 +225,45 @@ public class Main
         } while (true);
     }
 
-    private static void connectEbToKid(ElectronicBracelet newElectronicBracelet, Kid newKid)
-    {
+    private static void addDefaultDevices() {
+        Guardian gar = new Guardian();
+        Kid kid = new Kid(17, "adam", gar);
+        ElectronicBracelet elec = new ElectronicBracelet();
+        systemManager.create_eTicket("11", elec, systemManager);
+        elec.setKid(kid);
+        kid.setHeight(180);
+        kid.setWeight(50);
+//        eTicket ticket = new eTicket("11", elec, systemManager);
+//        ticket.getId();
+//        Account account = new Account(systemManager, gar);
+        systemManager.create_gAccount(gar);
+
+
+        kid.setID("1");
+
+        ArrayList<Integer> mambaRestrictions = new ArrayList<>();
+        mambaRestrictions.add(2147483647);
+        mambaRestrictions.add(140);
+        mambaRestrictions.add(12);
+        int mambaRPrice = 0;
+        systemManager.addDevice("Mamba Ride", true, mambaRestrictions, mambaRPrice);
+
+        ArrayList<Integer> GiantWheelRestrictions = new ArrayList<>();
+        GiantWheelRestrictions.add(2147483647);
+        GiantWheelRestrictions.add(0);
+        GiantWheelRestrictions.add(0);
+        int wheelRPrice = 0;
+        systemManager.addDevice("Giant Wheel", false, GiantWheelRestrictions, wheelRPrice);
+
+        ArrayList<Integer> CarrouselRestrictions = new ArrayList<>();
+        CarrouselRestrictions.add(2147483647);
+        CarrouselRestrictions.add(0);
+        CarrouselRestrictions.add(8);
+        int CarrouselPrice = 0;
+        systemManager.addDevice("Carrousel", false, CarrouselRestrictions, CarrouselPrice);
+    }
+
+    private static void connectEbToKid(ElectronicBracelet newElectronicBracelet, Kid newKid) {
         newElectronicBracelet.setKid(newKid);
         newKid.setElectronicBracelet(newElectronicBracelet);
     }
@@ -281,6 +297,8 @@ public class Main
     {
         SystemManager systemManager1 = new SystemManager();
         Guardian guardian1 = new Guardian();
+        Account account1 = new Account(systemManager, guardian1);
+        account = account1;
         systemObjects = new ArrayList<>();
         systemObjects.add(systemManager);
         systemObjects.add(guardian);
