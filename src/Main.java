@@ -1,6 +1,7 @@
 import java.util.*;
 
-public class Main {
+public class Main
+{
 
     private static SystemManager systemManager;
     private static Guardian guardian;
@@ -8,26 +9,29 @@ public class Main {
     public static List<Object> systemObjects; //TODO: add/remove all objects to list
 
 
-    public static void getUSerInput() {
-
-
+    public static void getUSerInput()
+    {
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
 
-        System.out.println("Welcome to ePark ! \n" +
-                "1.    Register child \n" +
-                "2.    Manage ticket \n" +
-                "3.    Add ride \n" +
-                "4.    Remove ride \n" +
-                "5.    Exit park \n" +
-                "6.    exit");
-        System.out.println("Please write the number or the followed text");
-
         String choice;
-        do {
+
+        do
+        {
+            System.out.println("Welcome to ePark ! \n" +
+                    "1.    Register child \n" +
+                    "2.    Manage ticket \n" +
+                    "3.    Add ride \n" +
+                    "4.    Remove ride \n" +
+                    "5.    Exit park \n" +
+                    "6.    exit");
+            System.out.println("Please write the number or the followed text");
+
             choice = myObj.nextLine();
-            switch (choice) {
+            switch (choice)
+            {
                 case "Register child":
-                case "1": {
+                case "1":
+                {
                     System.out.println("Welcome!\nPlease enter your kid's name:\n");
                     String kidName = myObj.nextLine();
                     System.out.println("Please enter your kid's age:\n");
@@ -59,14 +63,16 @@ public class Main {
                     break;
                 }
                 case "Add ride":
-                case "3": {
+                case "3":
+                {
                     myObj = new Scanner(System.in);
                     System.out.println("please enter the kid's id that you wish to add ride to");
                     String kidID = myObj.nextLine();
 
                     // checking if the kid exist
                     Boolean kidRegistered = systemManager.checkForKid(kidID);
-                    if (!kidRegistered) {
+                    if (!kidRegistered)
+                    {
                         System.out.println("there's no kid register with that id." +
                                 "you can register you kid by pressing 1");
                         break;
@@ -76,7 +82,8 @@ public class Main {
                     ArrayList<Device> allowedDevices = systemManager.getAllowedDevices(kidID);
 
                     ArrayList<Device> selectedDevices = new ArrayList<>();
-                    if (allowedDevices == null){
+                    if (allowedDevices == null)
+                    {
                         System.out.println("there are no devices suitable for you kid");
                         break;
                     }
@@ -88,9 +95,11 @@ public class Main {
                     );
 
                     // selecting devices
-                    while (true) {
+                    while (true)
+                    {
                         // print names
-                        for (Device device : allowedDevices) {
+                        for (Device device : allowedDevices)
+                        {
                             System.out.println("device: " + device.getName() + " price: " + device.getPrice());
                         }
 
@@ -98,36 +107,44 @@ public class Main {
                         String device_choice = myObj.nextLine();
 
                         // checking if they want to finish
-                        if (Objects.equals(device_choice, "i'm done") || Objects.equals(device_choice, "0")) {
+                        if (Objects.equals(device_choice, "i'm done") || Objects.equals(device_choice, "0"))
+                        {
                             break;
                         }
 
                         Boolean isDevice = false;
                         // checking if the answer matches a device
-                        for (Device device : allowedDevices) {
-                            if (Objects.equals(device.getName(), device_choice)) {
+                        for (Device device : allowedDevices)
+                        {
+                            if (Objects.equals(device.getName(), device_choice))
+                            {
                                 isDevice = true;
                                 // the device has been chosen already
-                                if (selectedDevices.contains(device)) {
+                                if (selectedDevices.contains(device))
+                                {
                                     System.out.println("the deceive has already been selected");
                                 }
                                 selectedDevices.add(device);
                             }
                         }
-                        if (!isDevice){
+                        if (!isDevice)
+                        {
                             System.out.println("we couldn't recognize the device. please look at the list, or check your spelling");
                         }
                     }
 
                     // checking if the devices are extreme
                     ArrayList<Device> extremeDevices = systemManager.addEntryToTicketForDevices(kidID, selectedDevices, guardian.getAccount());
-                    if (extremeDevices != null) {
+                    if (extremeDevices != null)
+                    {
                         ArrayList<Device> approvedDevice = new ArrayList<>();
                         System.out.println("for each extreme device- please enter yes if you approve");
-                        for (Device device : extremeDevices) {
+                        for (Device device : extremeDevices)
+                        {
                             System.out.println(device.getName());
                             String answer = myObj.nextLine();
-                            if (Objects.equals(answer, "yes")) {
+                            if (Objects.equals(answer, "yes"))
+                            {
                                 approvedDevice.add(device);
                             }
                         }
@@ -136,7 +153,8 @@ public class Main {
                 }
 
                 case "Remove ride":
-                case "4": {
+                case "4":
+                {
                     System.out.println("please enter the kid's id that you wish to remove ride from");
                     String kidID = myObj.nextLine();
 
@@ -150,16 +168,20 @@ public class Main {
                     ArrayList<Device> selectedDevices = new ArrayList<>();
 
                     // get the entries dictionary
-                    for (Map.Entry<Device, Integer> entry : entries.entrySet()) {
+                    for (Map.Entry<Device, Integer> entry : entries.entrySet())
+                    {
                         String mes = entry.getKey().getName() + " number of entries: " + entry.getValue();
                         System.out.println(mes);
                     }
 
                     String device_choice = myObj.nextLine();
-                    while (!(Objects.equals(device_choice, "i'm done") || Objects.equals(device_choice, "0"))) {
-                        for (Device device : entries.keySet()) {
+                    while (!(Objects.equals(device_choice, "i'm done") || Objects.equals(device_choice, "0")))
+                    {
+                        for (Device device : entries.keySet())
+                        {
                             // wanting to remove said device
-                            if (Objects.equals(device_choice, device.getName())) {
+                            if (Objects.equals(device_choice, device.getName()))
+                            {
                                 selectedDevices.add(device);
                             }
                         }
@@ -173,7 +195,8 @@ public class Main {
                     String kidID = myObj.nextLine();
                     System.out.println("Please confirm that you returned the bracelet: yes/no");
                     String returned = myObj.nextLine();
-                    while (!(Objects.equals(returned, "yes"))) {
+                    while (!(Objects.equals(returned, "yes")))
+                    {
                         System.out.println("Please confirm that you returned the bracelet: yes/no");
                         returned = myObj.nextLine();
                         System.out.println("thank you, goodbye");
@@ -182,21 +205,25 @@ public class Main {
                     }
 
                 case "exit":
-                case "6": {
+                case "6":
+                {
                     break;
                 }
             }
         } while (true);
     }
 
-    private static void connectEbToKid(ElectronicBracelet newElectronicBracelet, Kid newKid) {
+    private static void connectEbToKid(ElectronicBracelet newElectronicBracelet, Kid newKid)
+    {
         newElectronicBracelet.setKid(newKid);
         newKid.setElectronicBracelet(newElectronicBracelet);
     }
 
 
-    public static Kid fill_SignupForm(String name, int age, Guardian guard) {
-        if (name != null && age != 0) {
+    public static Kid fill_SignupForm(String name, int age, Guardian guard)
+    {
+        if (name != null && age != 0)
+        {
             Kid kid = guard.createKid(age, name);
             return kid;
         }
@@ -204,14 +231,16 @@ public class Main {
         return null;
     }
 
-    public static void creditInfo(int creditCard1, int topLimit1) {
+    public static void creditInfo(int creditCard1, int topLimit1)
+    {
         systemManager.isValidCredit(creditCard1, topLimit1);
         guardian.setCreditCard(creditCard1);
         guardian.setTopLimit(topLimit1);
         //TODO: if not ok?
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         SystemManager systemManager1 = new SystemManager();
         Guardian guardian1 = new Guardian();
         systemObjects = new ArrayList<>();
