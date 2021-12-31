@@ -48,6 +48,7 @@ public class Main
                     systemManager.setKidID(newKid);
                     ElectronicBracelet newElectronicBracelet = systemManager.create_electronicBracelet();
                     String password = systemManager.getNewPassword(guardian);
+                    guardian.addKidPassward(newKid.getID(),password);
                     System.out.println("Your password is: "+ password);
                     eTicket ticket = systemManager.create_eTicket(password, newElectronicBracelet, systemManager);
                     ticket.setElectronicBracelet(newElectronicBracelet);
@@ -234,6 +235,7 @@ public class Main
                 return null;
             }
         }
+        return null;
     }
 
     public static void creditInfo(int creditCard1, int topLimit1){

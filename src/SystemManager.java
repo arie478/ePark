@@ -8,7 +8,7 @@ public class SystemManager {
     private ArrayList<Account> allAccounts; //TODO: add
     private ArrayList<Guardian> allGuards; //TODO: add
     private ArrayList<String> allKidsID;
-    private HashMap<Guardian,String> allPassword;
+    private HashMap<Guardian,ArrayList<String> >allPassword;
 
 
     public SystemManager() {
@@ -222,7 +222,11 @@ public class SystemManager {
             newPassword.append(String.valueOf(rand));
         }
         String password = newPassword.toString();
-        allPassword.put(guardian,password);
+        if (allPassword.get(guardian)==null){
+            ArrayList<String> arr = new ArrayList<>();
+            allPassword.put(guardian,arr);
+        }
+        allPassword.get(guardian).add(password);
         return password;
     }
 }
