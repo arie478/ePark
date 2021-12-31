@@ -51,26 +51,33 @@ public class Main
                         {
                             break;
                         }
+                        systemObjects.add(newKid);
                         System.out.println("Please enter your creditCard number:\n");
                         String creditCard = myObj.nextLine();
                         System.out.println("Please enter your topLimit:\n");
                         String topLimit = myObj.nextLine();
                         System.out.println("checking details...\n");
-                        creditInfo(Integer.parseInt(creditCard), Integer.parseInt(topLimit));
-                        //systemManager.create_gAccount(guardian); //TODO: needs to be static?
+                        boolean stat = creditInfo(Integer.parseInt(creditCard), Integer.parseInt(topLimit));
+                        if(!stat){
+                            systemObjects.remove(newKid);
+                            break; //TODO: need to delete child?
+                        }
 
                         if (account == null)
                         {
                             account = new Account(systemManager, guardian);
+                            systemObjects.add(account);
                         }
 
                         systemManager.setKidID(newKid);
                         ElectronicBracelet newElectronicBracelet = systemManager.create_electronicBracelet();
+                        systemObjects.add(newElectronicBracelet);
                         String password = systemManager.getNewPassword(guardian);
                         guardian.addKidPassward(newKid.getID(), password);
                         System.out.println("Your id is: " + newKid.getID());
                         System.out.println("Your password is: " + password);
                         eTicket ticket = systemManager.create_eTicket(password, newElectronicBracelet, systemManager);
+                        systemObjects.add(ticket);
                         ticket.setElectronicBracelet(newElectronicBracelet);
                         connectEbToKid(newElectronicBracelet, newKid);
                         System.out.println("Now measure your kid please with the measure scale\n");
@@ -368,12 +375,16 @@ public class Main
         return null;
     }
 
-    public static void creditInfo(int creditCard1, int topLimit1)
+    public static boolean creditInfo(int creditCard1, int topLimit1)
     {
-        systemManager.isValidCredit(creditCard1, topLimit1);
-        guardian.setCreditCard(creditCard1);
-        guardian.setTopLimit(topLimit1);
-        //TODO: if not ok?
+        boolean ans = systemManager.isValidCredit(creditCard1, topLimit1);
+        if(ans){
+            guardian.setCreditCard(creditCard1);
+            guardian.setTopLimit(topLimit1);
+            return true;
+        }
+        return false;
+
     }
 
     public static void main(String[] args)
@@ -387,6 +398,7 @@ public class Main
         guardian = guardian1;
         guardian.setSystemManager(systemManager);
         systemManager.connectToGuard(guardian);
+
         getUSerInput();
     }
 }
