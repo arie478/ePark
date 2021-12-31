@@ -9,6 +9,8 @@ public class Main {
 
 
     public static void getUSerInput() {
+
+
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
 
         System.out.println("Welcome to ePark ! \n" +
@@ -62,9 +64,23 @@ public class Main {
                     System.out.println("please enter the kid's id that you wish to add ride to");
                     String kidID = myObj.nextLine();
 
+                    // checking if the kid exist
+                    Boolean kidRegistered = systemManager.checkForKid(kidID);
+                    if (!kidRegistered) {
+                        System.out.println("there's no kid register with that id." +
+                                "you can register you kid by pressing 1");
+                        break;
+                    }
+
                     // check the allowed devices for a kid
                     ArrayList<Device> allowedDevices = systemManager.getAllowedDevices(kidID);
+
                     ArrayList<Device> selectedDevices = new ArrayList<>();
+                    if (allowedDevices == null){
+                        System.out.println("there are no devices suitable for you kid");
+                        break;
+                    }
+
 
                     System.out.println("chose the wanted devices \n" +
                             "please chose only one device at a time \n" +
@@ -86,15 +102,20 @@ public class Main {
                             break;
                         }
 
+                        Boolean isDevice = false;
                         // checking if the answer matches a device
                         for (Device device : allowedDevices) {
                             if (Objects.equals(device.getName(), device_choice)) {
+                                isDevice = true;
                                 // the device has been chosen already
                                 if (selectedDevices.contains(device)) {
                                     System.out.println("the deceive has already been selected");
                                 }
                                 selectedDevices.add(device);
                             }
+                        }
+                        if (!isDevice){
+                            System.out.println("we couldn't recognize the device. please look at the list, or check your spelling");
                         }
                     }
 
@@ -165,7 +186,7 @@ public class Main {
                     break;
                 }
             }
-        }while (true);
+        } while (true);
     }
 
     private static void connectEbToKid(ElectronicBracelet newElectronicBracelet, Kid newKid) {
@@ -175,8 +196,8 @@ public class Main {
 
 
     public static Kid fill_SignupForm(String name, int age, Guardian guard) {
-        if(name!=null && age!=0){
-            Kid kid =guard.createKid(age,name);
+        if (name != null && age != 0) {
+            Kid kid = guard.createKid(age, name);
             return kid;
         }
         //TODO: if not ok?
@@ -184,7 +205,7 @@ public class Main {
     }
 
     public static void creditInfo(int creditCard1, int topLimit1) {
-        systemManager.isValidCredit(creditCard1,topLimit1);
+        systemManager.isValidCredit(creditCard1, topLimit1);
         guardian.setCreditCard(creditCard1);
         guardian.setTopLimit(topLimit1);
         //TODO: if not ok?
@@ -192,8 +213,8 @@ public class Main {
 
     public static void main(String[] args) {
         SystemManager systemManager1 = new SystemManager();
-        Guardian guardian1 =new Guardian();
-        systemObjects = new ArrayList<>() ;
+        Guardian guardian1 = new Guardian();
+        systemObjects = new ArrayList<>();
         systemObjects.add(systemManager);
         systemObjects.add(guardian);
         systemManager = systemManager1;

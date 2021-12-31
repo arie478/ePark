@@ -197,9 +197,16 @@ public class SystemManager {
         }
     }
 
+    Boolean checkForKid(String kidsID) {
+        eTicket ticket = getTicketFromId(kidsID);
+        if (ticket == null) {
+            return false;
+        }
+        return true;
+    }
+
     public void connectToGuard(Guardian guardian) {
         this.allGuards.add(guardian);
 
     }
-
 }
