@@ -5,6 +5,7 @@ public class Main {
     private static SystemManager systemManager;
     private static Guardian guardian;
 
+    public static List<Object> systemObjects; //TODO: add/remove all objects to list
 
 
     public static void getUSerInput() {
@@ -23,34 +24,34 @@ public class Main {
         do {
             choice = myObj.nextLine();
             switch (choice) {
-                //case "Register child":
-                case "1":
+                case "Register child":
+                case "1": {
                     System.out.println("Welcome!\nPlease enter your kid's name:\n");
                     String kidName = myObj.nextLine();
                     System.out.println("Please enter your kid's age:\n");
                     String kidAge = myObj.nextLine();
                     System.out.println("checking details...\n");
-                    Kid newKid = fill_SignupForm(kidName,Integer.parseInt(kidAge),guardian);
+                    Kid newKid = fill_SignupForm(kidName, Integer.parseInt(kidAge), guardian);
                     System.out.println("Please enter your creditCard number:\n");
                     String creditCard = myObj.nextLine();
                     System.out.println("Please enter your topLimit:\n");
                     String topLimit = myObj.nextLine();
                     System.out.println("checking details...\n");
-                    creditInfo(Integer.parseInt(creditCard),Integer.parseInt(topLimit));
+                    creditInfo(Integer.parseInt(creditCard), Integer.parseInt(topLimit));
                     systemManager.create_gAccount(guardian); //TODO: needs to be static?
                     systemManager.setKidID(newKid);
-                    ElectronicBracelet newElectronicBracelet =systemManager.create_electronicBracelet();
-                    connectEbToKid(newElectronicBracelet,newKid);
+                    ElectronicBracelet newElectronicBracelet = systemManager.create_electronicBracelet();
+                    connectEbToKid(newElectronicBracelet, newKid);
                     System.out.println("Now measure your kid please with the measure scale\n");
                     System.out.println("waiting...\n");
                     System.out.println("Enter kid's weight (kg): \n");
                     String kidWeight = myObj.nextLine();
                     System.out.println("Enter kid's height (cm): \n");
                     String kidHeight = myObj.nextLine();
-                    guardian.setWeightAndHeight(Integer.parseInt(kidWeight),Integer.parseInt(kidHeight),newKid.getID());
-                    System.out.println(kidName+" was successfully registered !");
+                    guardian.setWeightAndHeight(Integer.parseInt(kidWeight), Integer.parseInt(kidHeight), newKid.getID());
+                    System.out.println(kidName + " was successfully registered !");
                     break;
-
+                }
                 case "Add ride":
                 case "3": {
                     myObj = new Scanner(System.in);
@@ -193,6 +194,9 @@ public class Main {
     public static void main(String[] args) {
         SystemManager systemManager1 = new SystemManager();
         Guardian guardian1 =new Guardian();
+        systemObjects = new ArrayList<>() ;
+        systemObjects.add(systemManager);
+        systemObjects.add(guardian);
         systemManager = systemManager1;
         guardian = guardian1;
         guardian.setSystemManager(systemManager);
