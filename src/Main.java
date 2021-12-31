@@ -30,6 +30,8 @@ public class Main {
                     String kidName = myObj.nextLine();
                     System.out.println("Please enter your kid's age:\n");
                     String kidAge = myObj.nextLine();
+                    System.out.println("Please enter password:\n");
+                    String password = myObj.nextLine();
                     System.out.println("checking details...\n");
                     Kid newKid = fill_SignupForm(kidName, Integer.parseInt(kidAge), guardian);
                     System.out.println("Please enter your creditCard number:\n");
@@ -41,6 +43,8 @@ public class Main {
                     systemManager.create_gAccount(guardian); //TODO: needs to be static?
                     systemManager.setKidID(newKid);
                     ElectronicBracelet newElectronicBracelet = systemManager.create_electronicBracelet();
+                    eTicket ticket = systemManager.create_eTicket(password, newElectronicBracelet, systemManager);
+                    ticket.setElectronicBracelet(newElectronicBracelet);
                     connectEbToKid(newElectronicBracelet, newKid);
                     System.out.println("Now measure your kid please with the measure scale\n");
                     System.out.println("waiting...\n");
@@ -71,7 +75,7 @@ public class Main {
                     while (true) {
                         // print names
                         for (Device device : allowedDevices) {
-                            System.out.println(device.getName());
+                            System.out.println("device: " + device.getName() + " price: " + device.getPrice());
                         }
 
                         // choice
@@ -95,7 +99,7 @@ public class Main {
                     }
 
                     // checking if the devices are extreme
-                    ArrayList<Device> extremeDevices = systemManager.addEntryToTicketForDevices(kidID, selectedDevices, getAccountFromKidId(kidID));
+                    ArrayList<Device> extremeDevices = systemManager.addEntryToTicketForDevices(kidID, selectedDevices, guardian.getAccount());
                     if (extremeDevices != null) {
                         ArrayList<Device> approvedDevice = new ArrayList<>();
                         System.out.println("for each extreme device- please enter yes if you approve");
@@ -106,7 +110,7 @@ public class Main {
                                 approvedDevice.add(device);
                             }
                         }
-                        systemManager.addApprovedDevices(kidID, approvedDevice, getAccountFromKidId(kidID));
+                        systemManager.addApprovedDevices(kidID, approvedDevice, guardian.getAccount());
                     }
                 }
 
@@ -139,7 +143,7 @@ public class Main {
                             }
                         }
                     }
-                    systemManager.removeEntryFromDevices(kidID, selectedDevices, getAccountFromKidId(kidID));
+                    systemManager.removeEntryFromDevices(kidID, selectedDevices, guardian.getAccount());
                 }
 
                 case "Exit park":
@@ -169,11 +173,6 @@ public class Main {
         newKid.setElectronicBracelet(newElectronicBracelet);
     }
 
-
-    // TODO- todo
-    public static Account getAccountFromKidId(String kid_id) {
-        return null;
-    }
 
     public static Kid fill_SignupForm(String name, int age, Guardian guard) {
         if(name!=null && age!=0){

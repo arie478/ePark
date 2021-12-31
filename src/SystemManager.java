@@ -98,8 +98,8 @@ public class SystemManager {
      * getting eTicket object from the eTicket list
      */
     private eTicket getTicketFromId(String kid_id) {
-        for (eTicket ticket: allETickets){
-            if(Objects.equals(ticket.getKidId(), kid_id)){
+        for (eTicket ticket : allETickets) {
+            if (Objects.equals(ticket.getKidId(), kid_id)) {
                 return ticket;
             }
         }
@@ -147,7 +147,7 @@ public class SystemManager {
      */
     public Account create_gAccount(Guardian guardian) {
         if (guardian != null) {
-            Account account =new Account(this, guardian);
+            Account account = new Account(this, guardian);
             this.allAccounts.add(account);
             guardian.setAccount(account);
             return account;
@@ -157,9 +157,9 @@ public class SystemManager {
     }
 
 
-    public eTicket create_eTicket() {
-        // TODO: implement
-        return null;
+    public eTicket create_eTicket(String password, ElectronicBracelet electronicBracelet, SystemManager systemManager) {
+        eTicket ticket = new eTicket(password, electronicBracelet, systemManager);
+        return ticket;
     }
 
     public void deleteEticket(eTicket eTicket) {
@@ -174,7 +174,7 @@ public class SystemManager {
         System.out.println("--- Payment accepted ---");
     }
 
-    public ElectronicBracelet create_electronicBracelet(){
+    public ElectronicBracelet create_electronicBracelet() {
         ElectronicBracelet electronicBracelet = new ElectronicBracelet();
         Random random = new Random();
         int id = random.nextInt(800);
@@ -183,12 +183,12 @@ public class SystemManager {
         return electronicBracelet;
     }
 
-    public void setKidID(Kid kid){
-        if(kid != null){
-            if(kid.getID()==null){
+    public void setKidID(Kid kid) {
+        if (kid != null) {
+            if (kid.getID() == null) {
                 Random random = new Random();
                 int id = random.nextInt(800);
-                while (allKidsID.contains(String.valueOf(id))){
+                while (allKidsID.contains(String.valueOf(id))) {
                     id = random.nextInt(800);
                 }
                 kid.setID(String.valueOf(id));
@@ -197,7 +197,7 @@ public class SystemManager {
         }
     }
 
-    public void connectToGuard(Guardian guardian){
+    public void connectToGuard(Guardian guardian) {
         this.allGuards.add(guardian);
 
     }

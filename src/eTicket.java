@@ -11,7 +11,7 @@ public class eTicket {
     ArrayList<Device> devices;
 
 
-    public eTicket(String password, ElectronicBracelet electronicBracelet, SystemManager systemManager, ArrayList<Device> deviceList) {
+    public eTicket(String password, ElectronicBracelet electronicBracelet, SystemManager systemManager) {
         this.password = password;
         this.electronicBracelet = electronicBracelet;
         this.systemManager = systemManager;
@@ -69,7 +69,7 @@ public class eTicket {
             int previous_value = my_dict.get(device);
             if(previous_value == 0)
             {
-                System.out.println("No rides left on device: " +  device);
+                System.out.println("No rides left on device: " +  device.getName());
                 continue;
             }
             my_dict.put(device,previous_value- 1);
