@@ -5,16 +5,9 @@ public class Main {
     private static SystemManager systemManager;
     private static Guardian guardian;
 
-    public static void main(String[] args) {
-        SystemManager systemManager1 = new SystemManager();
-        Guardian guardian1 =new Guardian();
-        systemManager = systemManager1;
-        guardian = guardian1;
-        guardian.setSystemManager(systemManager);
-        systemManager.connectToGuard(guardian);
-    }
 
-    public void getUSerInput() {
+
+    public static void getUSerInput() {
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
 
         System.out.println("Welcome to ePark ! \n" +
@@ -27,10 +20,10 @@ public class Main {
         System.out.println("Please write the number or the followed text");
 
         String choice;
-        while (true) {
+        do {
             choice = myObj.nextLine();
             switch (choice) {
-                case "Register child":
+                //case "Register child":
                 case "1":
                     System.out.println("Welcome!\nPlease enter your kid's name:\n");
                     String kidName = myObj.nextLine();
@@ -50,12 +43,13 @@ public class Main {
                     connectEbToKid(newElectronicBracelet,newKid);
                     System.out.println("Now measure your kid please with the measure scale\n");
                     System.out.println("waiting...\n");
-                    System.out.println("Enter kid's weight: \n");
+                    System.out.println("Enter kid's weight (kg): \n");
                     String kidWeight = myObj.nextLine();
-                    System.out.println("Enter kid's height: \n");
+                    System.out.println("Enter kid's height (cm): \n");
                     String kidHeight = myObj.nextLine();
                     guardian.setWeightAndHeight(Integer.parseInt(kidWeight),Integer.parseInt(kidHeight),newKid.getID());
                     System.out.println(kidName+" was successfully registered !");
+                    break;
 
                 case "Add ride":
                 case "3": {
@@ -166,21 +160,21 @@ public class Main {
                     break;
                 }
             }
-        }
+        }while (true);
     }
 
-    private void connectEbToKid(ElectronicBracelet newElectronicBracelet, Kid newKid) {
+    private static void connectEbToKid(ElectronicBracelet newElectronicBracelet, Kid newKid) {
         newElectronicBracelet.setKid(newKid);
         newKid.setElectronicBracelet(newElectronicBracelet);
     }
 
 
     // TODO- todo
-    public Account getAccountFromKidId(String kid_id) {
+    public static Account getAccountFromKidId(String kid_id) {
         return null;
     }
 
-    public Kid fill_SignupForm(String name, int age,Guardian guard) {
+    public static Kid fill_SignupForm(String name, int age, Guardian guard) {
         if(name!=null && age!=0){
             Kid kid =guard.createKid(age,name);
             return kid;
@@ -189,10 +183,20 @@ public class Main {
         return null;
     }
 
-    public void creditInfo(int creditCard1,int topLimit1) {
+    public static void creditInfo(int creditCard1, int topLimit1) {
         systemManager.isValidCredit(creditCard1,topLimit1);
         guardian.setCreditCard(creditCard1);
         guardian.setTopLimit(topLimit1);
         //TODO: if not ok?
+    }
+
+    public static void main(String[] args) {
+        SystemManager systemManager1 = new SystemManager();
+        Guardian guardian1 =new Guardian();
+        systemManager = systemManager1;
+        guardian = guardian1;
+        guardian.setSystemManager(systemManager);
+        systemManager.connectToGuard(guardian);
+        getUSerInput();
     }
 }

@@ -14,11 +14,12 @@ public class Guardian
     // Attributes from association
     private SystemManager systemManager;
     private Account account;
-    private List<Kid> kids;
+    private ArrayList<Kid> kids;
 
 
     public Guardian()
     {
+        this.kids = new ArrayList<>();
         allPasswards = new HashMap<>();
     }
 
