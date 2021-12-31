@@ -8,6 +8,8 @@ public class SystemManager {
     private ArrayList<Account> allAccounts; //TODO: add
     private ArrayList<Guardian> allGuards; //TODO: add
     private ArrayList<String> allKidsID;
+    private HashMap<Guardian,String> allPassword;
+
 
     public SystemManager() {
         this.allBracelets = new ArrayList<>();
@@ -16,6 +18,8 @@ public class SystemManager {
         this.allDevices = new ArrayList<>();
         this.allGuards = new ArrayList<>();
         this.allKidsID = new ArrayList<>();
+        this.allPassword = new HashMap<>();
+
     }
 
     public ArrayList<Device> addEntryToTicket(String kid_id) {
@@ -208,5 +212,17 @@ public class SystemManager {
     public void connectToGuard(Guardian guardian) {
         this.allGuards.add(guardian);
 
+    }
+
+    public String getNewPassword(Guardian guardian) {
+        Random random = new Random();
+        StringBuilder newPassword = new StringBuilder();
+        for (int i=0; i<7; i++){
+            int rand = random.nextInt(9);
+            newPassword.append(String.valueOf(rand));
+        }
+        String password = newPassword.toString();
+        allPassword.put(guardian,password);
+        return password;
     }
 }

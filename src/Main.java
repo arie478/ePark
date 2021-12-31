@@ -36,8 +36,6 @@ public class Main
                     String kidName = myObj.nextLine();
                     System.out.println("Please enter your kid's age:\n");
                     String kidAge = myObj.nextLine();
-                    System.out.println("Please enter password:\n");
-                    String password = myObj.nextLine();
                     System.out.println("checking details...\n");
                     Kid newKid = fill_SignupForm(kidName, Integer.parseInt(kidAge), guardian);
                     System.out.println("Please enter your creditCard number:\n");
@@ -49,6 +47,8 @@ public class Main
                     systemManager.create_gAccount(guardian); //TODO: needs to be static?
                     systemManager.setKidID(newKid);
                     ElectronicBracelet newElectronicBracelet = systemManager.create_electronicBracelet();
+                    String password = systemManager.getNewPassword(guardian);
+                    System.out.println("Your password is: "+ password);
                     eTicket ticket = systemManager.create_eTicket(password, newElectronicBracelet, systemManager);
                     ticket.setElectronicBracelet(newElectronicBracelet);
                     connectEbToKid(newElectronicBracelet, newKid);
