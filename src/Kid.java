@@ -6,14 +6,12 @@ public class Kid {
     private int age;
     private Guardian guardian;
     private ElectronicBracelet electronicBracelet;
+    private String name;
 
-    public Kid(String ID, int height, int weight, int age, Guardian guardian, ElectronicBracelet electronicBracelet) {
-        this.ID = ID;
-        this.height = height;
-        this.weight = weight;
+    public Kid(int age, String name,Guardian guardian) {
         this.age = age;
         this.guardian = guardian;
-        this.electronicBracelet = electronicBracelet;
+        this.name = name;
     }
 
     public void setGuardian(Guardian guardian) {

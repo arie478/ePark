@@ -16,15 +16,9 @@ public class Guardian
     private Account account;
     private List<Kid> kids;
 
-    /**
-     * Constructor for Guardian object
-     * @param newCreditCard - String representing the credit card number of the guardian
-     * @param newTopLimit - Int representing the credit limit for the guardian's credit card
-     */
-    public Guardian(int newCreditCard, int newTopLimit)
+
+    public Guardian()
     {
-        creditCard = newCreditCard;
-        topLimit = newTopLimit;
         allPasswards = new HashMap<>();
     }
 
@@ -32,7 +26,7 @@ public class Guardian
      * Adds a kid to the password dictionary
      * @param kidId - Int representing the id of the kid
      */
-    public void addKid(String kidId, String password)
+    public void addKidPassward(String kidId, String password)
     {
         allPasswards.put(kidId, password);
     }
@@ -41,7 +35,7 @@ public class Guardian
      * Remove a kid from the  password dictionary
      * @param kidId - Int representing the id of the kid
      */
-    public void deleteChild(String kidId)
+    public void deleteChildPassward(String kidId)
     {
         allPasswards.remove(kidId);
     }
@@ -63,4 +57,35 @@ public class Guardian
         // Kid kid = kids.get(kidId);
     }
 
+    public void setWeightAndHeight(int weight, int height, String kidID ){
+        for (Kid kid:
+             kids) {
+            if(kidID.equals(kid.getID())){
+                kid.setHeight(height);
+                kid.setWeight(weight);
+            }
+        }
+    }
+
+    public Kid createKid(int age,String name){
+        Kid kid = new Kid(age,name,this);
+        kids.add(kid);
+        return kid;
+    }
+
+    public void setCreditCard(int creditCard) {
+        this.creditCard = creditCard;
+    }
+
+    public void setTopLimit(int topLimit) {
+        this.topLimit = topLimit;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public void setSystemManager(SystemManager systemManager) {
+        this.systemManager = systemManager;
+    }
 }

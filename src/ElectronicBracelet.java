@@ -4,10 +4,13 @@ public class ElectronicBracelet {
     private Kid kid;
     private eTicket eTicket;
 
-    public ElectronicBracelet(String bracelet_id, Kid kid, eTicket eTicket) {
-        this.bracelet_id = bracelet_id;
-        this.kid = kid;
-        this.eTicket = eTicket;
+//    public ElectronicBracelet(String bracelet_id, Kid kid, eTicket eTicket) {
+//        this.bracelet_id = bracelet_id;
+//        this.kid = kid;
+//        this.eTicket = eTicket;
+//    }
+    public ElectronicBracelet(){
+        //nothing to init
     }
 
     public eTicket geteTicket() {

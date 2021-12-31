@@ -3,9 +3,15 @@ import java.util.*;
 public class Main {
 
     private static SystemManager systemManager;
+    private static Guardian guardian;
 
     public static void main(String[] args) {
-        SystemManager systemManager = new SystemManager();
+        SystemManager systemManager1 = new SystemManager();
+        Guardian guardian1 =new Guardian();
+        systemManager = systemManager1;
+        guardian = guardian1;
+        guardian.setSystemManager(systemManager);
+        systemManager.connectToGuard(guardian);
     }
 
     public void getUSerInput() {
@@ -24,6 +30,33 @@ public class Main {
         while (true) {
             choice = myObj.nextLine();
             switch (choice) {
+                case "Register child":
+                case "1":
+                    System.out.println("Welcome!\nPlease enter your kid's name:\n");
+                    String kidName = myObj.nextLine();
+                    System.out.println("Please enter your kid's age:\n");
+                    String kidAge = myObj.nextLine();
+                    System.out.println("checking details...\n");
+                    Kid newKid = fill_SignupForm(kidName,Integer.parseInt(kidAge),guardian);
+                    System.out.println("Please enter your creditCard number:\n");
+                    String creditCard = myObj.nextLine();
+                    System.out.println("Please enter your topLimit:\n");
+                    String topLimit = myObj.nextLine();
+                    System.out.println("checking details...\n");
+                    creditInfo(Integer.parseInt(creditCard),Integer.parseInt(topLimit));
+                    systemManager.create_gAccount(guardian); //TODO: needs to be static?
+                    systemManager.setKidID(newKid);
+                    ElectronicBracelet newElectronicBracelet =systemManager.create_electronicBracelet();
+                    connectEbToKid(newElectronicBracelet,newKid);
+                    System.out.println("Now measure your kid please with the measure scale\n");
+                    System.out.println("waiting...\n");
+                    System.out.println("Enter kid's weight: \n");
+                    String kidWeight = myObj.nextLine();
+                    System.out.println("Enter kid's height: \n");
+                    String kidHeight = myObj.nextLine();
+                    guardian.setWeightAndHeight(Integer.parseInt(kidWeight),Integer.parseInt(kidHeight),newKid.getID());
+                    System.out.println(kidName+" was successfully registered !");
+
                 case "Add ride":
                 case "3": {
                     myObj = new Scanner(System.in);
@@ -136,17 +169,30 @@ public class Main {
         }
     }
 
+    private void connectEbToKid(ElectronicBracelet newElectronicBracelet, Kid newKid) {
+        newElectronicBracelet.setKid(newKid);
+        newKid.setElectronicBracelet(newElectronicBracelet);
+    }
+
 
     // TODO- todo
     public Account getAccountFromKidId(String kid_id) {
         return null;
     }
 
-    public void view_SignupForm() {
-        //TODO: implement
+    public Kid fill_SignupForm(String name, int age,Guardian guard) {
+        if(name!=null && age!=0){
+            Kid kid =guard.createKid(age,name);
+            return kid;
+        }
+        //TODO: if not ok?
+        return null;
     }
 
-    public void view_paymentForm() {
-        //TODO: implement
+    public void creditInfo(int creditCard1,int topLimit1) {
+        systemManager.isValidCredit(creditCard1,topLimit1);
+        guardian.setCreditCard(creditCard1);
+        guardian.setTopLimit(topLimit1);
+        //TODO: if not ok?
     }
 }

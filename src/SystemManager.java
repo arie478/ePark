@@ -1,8 +1,5 @@
 import java.security.spec.RSAOtherPrimeInfo;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 
 public class SystemManager {
     private ArrayList<eTicket> allETickets; //TODO- needs to add when adding kid
@@ -10,6 +7,16 @@ public class SystemManager {
     private ArrayList<Device> allDevices; //TODO- add
     private ArrayList<Account> allAccounts; //TODO: add
     private ArrayList<Guardian> allGuards; //TODO: add
+    private ArrayList<String> allKidsID;
+
+    public SystemManager() {
+        this.allBracelets = new ArrayList<>();
+        this.allAccounts = new ArrayList<>();
+        this.allETickets = new ArrayList<>();
+        this.allDevices = new ArrayList<>();
+        this.allGuards = new ArrayList<>();
+        this.allKidsID = new ArrayList<>();
+    }
 
     public ArrayList<Device> addEntryToTicket(String kid_id) {
         return getAllowedDevices(kid_id);
@@ -140,8 +147,12 @@ public class SystemManager {
      */
     public Account create_gAccount(Guardian guardian) {
         if (guardian != null) {
-            return new Account(this, guardian);
+            Account account =new Account(this, guardian);
+            this.allAccounts.add(account);
+            guardian.setAccount(account);
+            return account;
         }
+
         return null;
     }
 
@@ -163,5 +174,32 @@ public class SystemManager {
         System.out.println("--- Payment accepted ---");
     }
 
+    public ElectronicBracelet create_electronicBracelet(){
+        ElectronicBracelet electronicBracelet = new ElectronicBracelet();
+        Random random = new Random();
+        int id = random.nextInt(800);
+        electronicBracelet.setBracelet_id(String.valueOf(id));
+        allBracelets.add(electronicBracelet);
+        return electronicBracelet;
+    }
+
+    public void setKidID(Kid kid){
+        if(kid != null){
+            if(kid.getID()==null){
+                Random random = new Random();
+                int id = random.nextInt(800);
+                while (allKidsID.contains(String.valueOf(id))){
+                    id = random.nextInt(800);
+                }
+                kid.setID(String.valueOf(id));
+                this.allKidsID.add(String.valueOf(id));
+            }
+        }
+    }
+
+    public void connectToGuard(Guardian guardian){
+        this.allGuards.add(guardian);
+
+    }
 
 }
