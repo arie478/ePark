@@ -93,8 +93,20 @@ public class SystemManager {
      */
     public void addApprovedDevices(String kid_id, ArrayList<Device> devices, Account account) {
         eTicket ticket = getTicketFromId(kid_id);
-        ticket.addEntries(devices);
-        account.addEntries(devices);
+        ArrayList<Device> devicesToAdd = new ArrayList<>();
+        for(Device device : devices)
+        {
+            if(account.getBalance(kid_id) + device.getPrice() > account.getGuardian().getTopLimit())
+            {
+                System.out.println("Adding the device " + device.getName() +" excceds your top limit");
+            }
+            else
+            {
+                devicesToAdd.add(device);
+            }
+        }
+        ticket.addEntries(devicesToAdd);
+        account.addEntries(devicesToAdd);
     }
 
 

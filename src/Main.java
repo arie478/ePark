@@ -43,8 +43,19 @@ public class Main
                     {
                         System.out.println("Welcome!\nPlease enter your kid's name:\n");
                         String kidName = myObj.nextLine();
+                        if(kidName.matches(".*\\d.*"))
+                        {
+                            System.out.println("name cannot have integers");
+                            break;
+                        }
                         System.out.println("Please enter your kid's age:\n");
                         String kidAge = myObj.nextLine();
+                        if(kidAge.matches(".*[a-z].*") || kidAge.matches(".*[A-Z].*"))
+                        {
+                            System.out.println("age cannot have characters");
+                            break;
+                        }
+
                         System.out.println("checking details...\n");
                         Kid newKid = fill_SignupForm(kidName, Integer.parseInt(kidAge), guardian);
                         if (newKid == null)
@@ -56,8 +67,23 @@ public class Main
                             systemObjects.add(newKid);
                             System.out.println("Please enter your creditCard number:\n");
                             String creditCard = myObj.nextLine();
+                            if(creditCard.matches(".*[a-z].*") || creditCard.matches(".*[A-Z].*"))
+                            {
+                                System.out.println("creditCard cannot have characters");
+                                break;
+                            }
                             System.out.println("Please enter your topLimit:\n");
                             String topLimit = myObj.nextLine();
+                            if(topLimit.matches(".*[a-z].*") || topLimit.matches(".*[A-Z].*"))
+                            {
+                                System.out.println("topLimit cannot have characters");
+                                break;
+                            }
+                            if(Integer.parseInt(topLimit) < 10)
+                            {
+                                System.out.println("Top limit must be at least 10");
+                                break;
+                            }
                             System.out.println("checking details...\n");
                             boolean stat = creditInfo(Integer.parseInt(creditCard), Integer.parseInt(topLimit));
                             if(!stat){
@@ -92,8 +118,18 @@ public class Main
                         System.out.println("waiting...\n");
                         System.out.println("Enter kid's weight (kg): \n");
                         String kidWeight = myObj.nextLine();
+                        if(kidWeight.matches(".*[a-z].*") || kidWeight.matches(".*[A-Z].*"))
+                        {
+                            System.out.println("kidWeight cannot have characters");
+                            break;
+                        }
                         System.out.println("Enter kid's height (cm): \n");
                         String kidHeight = myObj.nextLine();
+                        if(kidHeight.matches(".*[a-z].*") || kidHeight.matches(".*[A-Z].*"))
+                        {
+                            System.out.println("kidHeight cannot have characters");
+                            break;
+                        }
                         guardian.setWeightAndHeight(Integer.parseInt(kidWeight), Integer.parseInt(kidHeight), newKid.getID());
                         System.out.println(kidName + " was successfully registered !");
                         break;
@@ -254,10 +290,18 @@ public class Main
                         System.out.println("please enter the kid's id that you wish to remove ride from");
                         String kidID = myObj.nextLine();
 
+                        // checking if the kid exist
+                        Boolean kidRegistered = systemManager.checkForKid(kidID);
+                        if (!kidRegistered)
+                        {
+                            System.out.println("there's no kid registered with that id." +
+                                    "you can register you kid by pressing 1");
+                            break;
+                        }
                         // get all the kid's entries
                         Hashtable<Device, Integer> entries = systemManager.getEntries(kidID);
 
-                        System.out.println("chose the wanted devices \n" +
+                        System.out.println("choose the wanted devices \n" +
                                 "please chose only one device at a time \n" +
                                 "write 'i'm done' or 0 when you're done choosing"
                         );
@@ -324,11 +368,7 @@ public class Main
                         System.out.println("you have: " + guardian.getTopLimit());
                         System.out.println("and you owe: " + balance);
                         //you the balance is greater then the top limit
-                        if(balance > guardian.getTopLimit())
-                        {
-                            System.out.println("you owe more money then your top limit, please get more money");
-                            break;
-                        }
+
                         System.out.println("succsess, deducing your total limit to: ");
                         //update the top limit
                         guardian.setTopLimit(guardian.getTopLimit() - balance);
@@ -370,7 +410,7 @@ public class Main
                         }
                         System.out.println("The kid has left the park");
 
-
+                        break;
 
 
 
@@ -379,17 +419,11 @@ public class Main
                     case "exit":
                     case "6":
                     {
-
-                        for(Object obj : systemObjects)
-                        {
-                            if(systemObjects.contains(obj))
-                            {
-                                systemObjects.remove(obj);
-                            }
-                        }
+                        System.out.println("bye bye...");
                         System.exit(0);
+
                     }
-                    System.out.println("All objects removed and system closed");
+
                 }
 
             }
