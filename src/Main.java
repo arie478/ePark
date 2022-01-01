@@ -37,14 +37,14 @@ public class Main {
                     case "1": {
                         System.out.println("Welcome!\nPlease enter your kid's name:\n");
                         String kidName = myObj.nextLine();
-                        if (!(kidName.matches(".*[a-z].*")) || kidName.matches(".*[A-Z].*")) {
-                            System.out.println("please letters only");
+                        if (!((kidName.matches(".*[a-z].*")) || kidName.matches(".*[A-Z].*"))) {
+                            System.out.println("please enter letters only");
                             break;
                         }
                         System.out.println("Please enter your kid's age:\n");
                         String kidAge = myObj.nextLine();
                         if (!(kidAge.matches(".*\\d.*"))) {
-                            System.out.println("please enter number only");
+                            System.out.println("please enter numbers only");
                             break;
                         }
                         int age = Integer.parseInt(kidAge);
@@ -72,10 +72,10 @@ public class Main {
                                 System.out.println("topLimit cannot have characters");
                                 break;
                             }
-                            if (Integer.parseInt(topLimit) < 10) {
-                                System.out.println("Top limit must be at least 10");
-                                break;
-                            }
+//                            if (Integer.parseInt(topLimit) < 10) {
+//                                System.out.println("Top limit must be at least 10");
+//                                break;
+//                            }
                             System.out.println("checking details...\n");
                             boolean stat = creditInfo(Integer.parseInt(creditCard), Integer.parseInt(topLimit));
                             if (!stat) {
