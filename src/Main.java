@@ -1,7 +1,6 @@
 import java.util.*;
 
-public class Main
-{
+public class Main {
 
     private static SystemManager systemManager;
     private static Guardian guardian;
@@ -10,8 +9,7 @@ public class Main
     public static List<Object> systemObjects; //TODO: add/remove all objects to list
 
 
-    public static void getUSerInput()
-    {
+    public static void getUSerInput() {
 
         addDefaultDevices();
 
@@ -20,10 +18,8 @@ public class Main
         String choice;
 
 
-        do
-        {
-            try
-            {
+        do {
+            try {
 
 
                 System.out.println("Welcome to ePark ! \n" +
@@ -36,64 +32,60 @@ public class Main
                 System.out.println("Please write the number or the followed text");
 
                 choice = myObj.nextLine();
-                switch (choice)
-                {
+                switch (choice) {
                     case "Register child":
-                    case "1":
-                    {
+                    case "1": {
                         System.out.println("Welcome!\nPlease enter your kid's name:\n");
                         String kidName = myObj.nextLine();
-                        if(kidName.matches(".*\\d.*"))
-                        {
-                            System.out.println("name cannot have integers");
+                        if (!(kidName.matches(".*[a-z].*")) || kidName.matches(".*[A-Z].*")) {
+                            System.out.println("please letters only");
                             break;
                         }
                         System.out.println("Please enter your kid's age:\n");
                         String kidAge = myObj.nextLine();
-                        if(kidAge.matches(".*[a-z].*") || kidAge.matches(".*[A-Z].*"))
-                        {
-                            System.out.println("age cannot have characters");
+                        if (!(kidAge.matches(".*\\d.*"))) {
+                            System.out.println("please enter number only");
+                            break;
+                        }
+                        int age = Integer.parseInt(kidAge);
+                        if (age <= 0) {
+                            System.out.println("please enter age above 0");
                             break;
                         }
 
                         System.out.println("checking details...\n");
                         Kid newKid = fill_SignupForm(kidName, Integer.parseInt(kidAge), guardian);
-                        if (newKid == null)
-                        {
+                        if (newKid == null) {
                             break;
                         }
-                        if (account == null)
-                        {
+                        if (account == null) {
                             systemObjects.add(newKid);
                             System.out.println("Please enter your creditCard number:\n");
                             String creditCard = myObj.nextLine();
-                            if(creditCard.matches(".*[a-z].*") || creditCard.matches(".*[A-Z].*"))
-                            {
+                            if (!(creditCard.matches(".*\\d.*"))) {
                                 System.out.println("creditCard cannot have characters");
                                 break;
                             }
                             System.out.println("Please enter your topLimit:\n");
                             String topLimit = myObj.nextLine();
-                            if(topLimit.matches(".*[a-z].*") || topLimit.matches(".*[A-Z].*"))
-                            {
+                            if (!(topLimit.matches(".*\\d.*"))) {
                                 System.out.println("topLimit cannot have characters");
                                 break;
                             }
-                            if(Integer.parseInt(topLimit) < 10)
-                            {
+                            if (Integer.parseInt(topLimit) < 10) {
                                 System.out.println("Top limit must be at least 10");
                                 break;
                             }
                             System.out.println("checking details...\n");
                             boolean stat = creditInfo(Integer.parseInt(creditCard), Integer.parseInt(topLimit));
-                            if(!stat){
+                            if (!stat) {
                                 systemObjects.remove(newKid);
                                 break; //TODO: need to delete child?
                             }
 
 
-                                account = new Account(systemManager, guardian);
-                                systemObjects.add(account);
+                            account = new Account(systemManager, guardian);
+                            systemObjects.add(account);
                         }
 
                         // john
@@ -118,15 +110,13 @@ public class Main
                         System.out.println("waiting...\n");
                         System.out.println("Enter kid's weight (kg): \n");
                         String kidWeight = myObj.nextLine();
-                        if(kidWeight.matches(".*[a-z].*") || kidWeight.matches(".*[A-Z].*"))
-                        {
+                        if (!(kidWeight.matches(".*\\d.*"))) {
                             System.out.println("kidWeight cannot have characters");
                             break;
                         }
                         System.out.println("Enter kid's height (cm): \n");
                         String kidHeight = myObj.nextLine();
-                        if(kidHeight.matches(".*[a-z].*") || kidHeight.matches(".*[A-Z].*"))
-                        {
+                        if (!(kidHeight.matches(".*\\d.*"))) {
                             System.out.println("kidHeight cannot have characters");
                             break;
                         }
@@ -138,14 +128,12 @@ public class Main
                     /**
                      * Manage ticket
                      */
-                    case "2":
-                    {
+                    case "2": {
                         System.out.println("Please enter your kid's id:\n");
                         String kidId = myObj.nextLine();
 
                         // checking if the kid exist
-                        if (!systemManager.checkForKid(kidId))
-                        {
+                        if (!systemManager.checkForKid(kidId)) {
                             System.out.println("there's no kid register with that id." +
                                     "you can register you kid by pressing 1");
                             break;
@@ -154,12 +142,10 @@ public class Main
                         System.out.println("Please enter password:\n");
                         String password = myObj.nextLine();
 
-                        if (systemManager.connectToTicket(kidId, password))
-                        {
+                        if (systemManager.connectToTicket(kidId, password)) {
                             System.out.printf("Successfully connected to %s's ticket\n", kidId);
                             systemManager.showTicket(kidId);
-                        } else
-                        {
+                        } else {
                             System.out.printf("Wrong password for %s's ticket", kidId);
                         }
 
@@ -167,16 +153,14 @@ public class Main
                     }
 
                     case "Add ride":
-                    case "3":
-                    {
+                    case "3": {
                         myObj = new Scanner(System.in);
                         System.out.println("please enter the kid's id that you wish to add ride to");
                         String kidID = myObj.nextLine();
 
                         // checking if the kid exist
                         Boolean kidRegistered = systemManager.checkForKid(kidID);
-                        if (!kidRegistered)
-                        {
+                        if (!kidRegistered) {
                             System.out.println("there's no kid register with that id." +
                                     "you can register you kid by pressing 1");
                             break;
@@ -186,8 +170,7 @@ public class Main
                         ArrayList<Device> allowedDevices = systemManager.getAllowedDevices(kidID);
 
                         ArrayList<Device> selectedDevices = new ArrayList<>();
-                        if (allowedDevices == null)
-                        {
+                        if (allowedDevices == null) {
                             System.out.println("there are no devices suitable for you kid");
                             break;
                         }
@@ -199,11 +182,9 @@ public class Main
                         );
 
                         // selecting devices
-                        while (true)
-                        {
+                        while (true) {
                             // print names
-                            for (Device device : allowedDevices)
-                            {
+                            for (Device device : allowedDevices) {
                                 System.out.println("device: " + device.getName() + " | price: " + device.getPrice());
                             }
 
@@ -211,23 +192,20 @@ public class Main
                             String device_choice = myObj.nextLine();
 
                             // checking if they want to finish
-                            if (Objects.equals(device_choice, "i'm done") || Objects.equals(device_choice, "0"))
-                            {
+                            if (Objects.equals(device_choice, "i'm done") || Objects.equals(device_choice, "0")) {
                                 break;
                             }
 
                             Boolean isDevice = false;
                             Boolean printFinalMessage = true;
                             // checking if the answer matches a device
-                            for (Device device : allowedDevices)
-                            {
+                            for (Device device : allowedDevices) {
                                 if (device.getName().equalsIgnoreCase(device_choice.toLowerCase(Locale.ROOT)))
 //                            if (Objects.equalsIgnoreCase(device.getName(), device_choice.))
                                 {
                                     isDevice = true;
                                     // the device has been chosen already
-                                    if (selectedDevices.contains(device))
-                                    {
+                                    if (selectedDevices.contains(device)) {
                                         String msg = device_choice + " has already been selected";
                                         System.out.println(msg);
 
@@ -239,17 +217,14 @@ public class Main
                                     selectedDevices.add(device);
                                     //john
                                     Account a = guardian.getAccount();
-                                    a.updateEntries(kidID,device.getPrice());
+                                    a.updateEntries(kidID, device.getPrice());
                                     //
                                 }
                             }
-                            if (printFinalMessage)
-                            {
-                                if (!isDevice)
-                                {
+                            if (printFinalMessage) {
+                                if (!isDevice) {
                                     System.out.println("we couldn't recognize the device. please look at the list, or check your spelling");
-                                } else
-                                {
+                                } else {
                                     String msg = device_choice + " has been added to your selected rides";
                                     System.out.println(msg);
 
@@ -259,16 +234,13 @@ public class Main
 
                         // checking if the devices are extreme
                         ArrayList<Device> extremeDevices = systemManager.addEntryToTicketForDevices(kidID, selectedDevices, account);
-                        if (extremeDevices != null)
-                        {
+                        if (extremeDevices != null) {
                             ArrayList<Device> approvedDevice = new ArrayList<>();
                             System.out.println("for each extreme device- please enter yes if you approve");
-                            for (Device device : extremeDevices)
-                            {
+                            for (Device device : extremeDevices) {
                                 System.out.println(device.getName());
                                 String answer = myObj.nextLine();
-                                if (Objects.equals(answer, "yes"))
-                                {
+                                if (Objects.equals(answer, "yes")) {
                                     approvedDevice.add(device);
                                     System.out.println("entry has been added to " + device.getName());
 
@@ -285,15 +257,13 @@ public class Main
                     }
 
                     case "Remove ride":
-                    case "4":
-                    {
+                    case "4": {
                         System.out.println("please enter the kid's id that you wish to remove ride from");
                         String kidID = myObj.nextLine();
 
                         // checking if the kid exist
                         Boolean kidRegistered = systemManager.checkForKid(kidID);
-                        if (!kidRegistered)
-                        {
+                        if (!kidRegistered) {
                             System.out.println("there's no kid registered with that id." +
                                     "you can register you kid by pressing 1");
                             break;
@@ -306,27 +276,22 @@ public class Main
                                 "write 'i'm done' or 0 when you're done choosing"
                         );
                         ArrayList<Device> selectedDevices = new ArrayList<>();
-                        while (true)
-                        {
+                        while (true) {
 
                             // get the entries dictionary
-                            for (Map.Entry<Device, Integer> entry : entries.entrySet())
-                            {
+                            for (Map.Entry<Device, Integer> entry : entries.entrySet()) {
                                 String mes = entry.getKey().getName() + " number of entries: " + entry.getValue();
                                 System.out.println(mes);
                             }
 
                             String device_choice = myObj.nextLine();
-                            if (Objects.equals(device_choice, "i'm done") || Objects.equals(device_choice, "0"))
-                            {
+                            if (Objects.equals(device_choice, "i'm done") || Objects.equals(device_choice, "0")) {
                                 break;
                             }
 
-                            for (Device device : entries.keySet())
-                            {
+                            for (Device device : entries.keySet()) {
                                 // wanting to remove said device
-                                if (device.getName().equalsIgnoreCase(device_choice.toLowerCase(Locale.ROOT)))
-                                {
+                                if (device.getName().equalsIgnoreCase(device_choice.toLowerCase(Locale.ROOT))) {
                                     selectedDevices.add(device);
                                     System.out.println("entry has been remove from " + device.getName());
                                     systemManager.removeEntryFromDevices(kidID, selectedDevices, account);
@@ -350,8 +315,7 @@ public class Main
 
                         // checking if the kid exist
                         Boolean kidRegistered = systemManager.checkForKid(kidID);
-                        if (!kidRegistered)
-                        {
+                        if (!kidRegistered) {
                             System.out.println("there's no kid register with that id." +
                                     "you can register you kid by pressing 1");
                             break;
@@ -392,20 +356,17 @@ public class Main
                         //remove from all objects
 
                         //remove kid
-                        if(systemObjects.contains(removedKid))
-                        {
+                        if (systemObjects.contains(removedKid)) {
                             systemObjects.remove(removedKid);
                         }
 
                         //remove bracelet
-                        if(systemObjects.contains(eb))
-                        {
+                        if (systemObjects.contains(eb)) {
                             systemObjects.remove(eb);
                         }
 
                         //remove ticket
-                        if(systemObjects.contains(ticket))
-                        {
+                        if (systemObjects.contains(ticket)) {
                             systemObjects.remove(ticket);
                         }
                         System.out.println("The kid has left the park");
@@ -413,12 +374,8 @@ public class Main
                         break;
 
 
-
-
-
                     case "exit":
-                    case "6":
-                    {
+                    case "6": {
                         System.out.println("bye bye...");
                         System.exit(0);
 
@@ -426,17 +383,14 @@ public class Main
 
                 }
 
-            }
-            catch (Exception exception)
-            {
+            } catch (Exception exception) {
                 System.out.println((exception.fillInStackTrace()));
                 continue;
             }
         } while (true);
     }
 
-    private static void addDefaultDevices()
-    {
+    private static void addDefaultDevices() {
         Guardian gar = new Guardian();
         Kid kid = new Kid(17, "adam", gar);
         ElectronicBracelet elec = new ElectronicBracelet();
@@ -474,27 +428,21 @@ public class Main
         systemManager.addDevice("Carrousel", false, CarrouselRestrictions, CarrouselPrice);
     }
 
-    private static void connectEbToKid(ElectronicBracelet newElectronicBracelet, Kid newKid)
-    {
+    private static void connectEbToKid(ElectronicBracelet newElectronicBracelet, Kid newKid) {
         newElectronicBracelet.setKid(newKid);
         newKid.setElectronicBracelet(newElectronicBracelet);
     }
 
 
-    public static Kid fill_SignupForm(String name, int age, Guardian guard)
-    {
-        if (name != null && age != 0)
-        {
-            if (age > 0 && !name.isEmpty())
-            {
+    public static Kid fill_SignupForm(String name, int age, Guardian guard) {
+        if (name != null && age != 0) {
+            if (age > 0 && !name.isEmpty()) {
                 Kid kid = guard.createKid(age, name);
                 return kid;
-            } else if (age <= 0)
-            {
+            } else if (age <= 0) {
                 System.out.println("please try to register again with valid age\n");
                 return null;
-            } else if (name.isEmpty())
-            {
+            } else if (name.isEmpty()) {
                 System.out.println("please try to register again with valid name\n");
                 return null;
             }
@@ -502,10 +450,9 @@ public class Main
         return null;
     }
 
-    public static boolean creditInfo(int creditCard1, int topLimit1)
-    {
+    public static boolean creditInfo(int creditCard1, int topLimit1) {
         boolean ans = systemManager.isValidCredit(creditCard1, topLimit1);
-        if(ans){
+        if (ans) {
             guardian.setCreditCard(creditCard1);
             guardian.setTopLimit(topLimit1);
             return true;
@@ -514,8 +461,7 @@ public class Main
 
     }
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         SystemManager systemManager1 = new SystemManager();
         Guardian guardian1 = new Guardian();
         systemObjects = new ArrayList<>();
