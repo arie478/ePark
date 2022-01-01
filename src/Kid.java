@@ -14,6 +14,10 @@ public class Kid {
         this.name = name;
     }
 
+    public ElectronicBracelet getElectronicBracelet() {
+        return electronicBracelet;
+    }
+
     public void setGuardian(Guardian guardian) {
         this.guardian = guardian;
     }

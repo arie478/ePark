@@ -30,6 +30,10 @@ public class Account
      */
     public int getBalance(String kidId)
     {
+        if(totalPurchases.isEmpty())
+        {
+            return 0;
+        }
         return totalPurchases.get(kidId);
     }
 
@@ -40,7 +44,11 @@ public class Account
      */
     public void updateEntries(String kidId, int price)
     {
-       totalPurchases.put(kidId, totalPurchases.get(kidId) + price);
+       if(totalPurchases.containsKey(kidId)) {
+           totalPurchases.put(kidId, totalPurchases.get(kidId) + price);
+           return;
+       }
+       totalPurchases.put(kidId,price);
     }
 
     /**

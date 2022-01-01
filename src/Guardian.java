@@ -15,10 +15,31 @@ public class Guardian {
     private Account account;
     private ArrayList<Kid> kids;
 
+    public int getTopLimit() {
+        return topLimit;
+    }
 
     public Guardian() {
         this.kids = new ArrayList<>();
         allPasswards = new HashMap<>();
+    }
+    public Kid getKidByID(String id)
+    {
+        for(Kid kid : kids){
+            if(kid.getID().equals(id))
+            {
+                return kid;
+            }
+        }
+        return null;
+    }
+
+    public boolean removeKid(Kid kid){
+        if(kids.contains(kid)) {
+            kids.remove(kid);
+            return true;
+        }
+        return false;
     }
 
     /**

@@ -51,24 +51,28 @@ public class Main
                         {
                             break;
                         }
-                        systemObjects.add(newKid);
-                        System.out.println("Please enter your creditCard number:\n");
-                        String creditCard = myObj.nextLine();
-                        System.out.println("Please enter your topLimit:\n");
-                        String topLimit = myObj.nextLine();
-                        System.out.println("checking details...\n");
-                        boolean stat = creditInfo(Integer.parseInt(creditCard), Integer.parseInt(topLimit));
-                        if(!stat){
-                            systemObjects.remove(newKid);
-                            break; //TODO: need to delete child?
-                        }
-
                         if (account == null)
                         {
-                            account = new Account(systemManager, guardian);
-                            systemObjects.add(account);
+                            systemObjects.add(newKid);
+                            System.out.println("Please enter your creditCard number:\n");
+                            String creditCard = myObj.nextLine();
+                            System.out.println("Please enter your topLimit:\n");
+                            String topLimit = myObj.nextLine();
+                            System.out.println("checking details...\n");
+                            boolean stat = creditInfo(Integer.parseInt(creditCard), Integer.parseInt(topLimit));
+                            if(!stat){
+                                systemObjects.remove(newKid);
+                                break; //TODO: need to delete child?
+                            }
+
+
+                                account = new Account(systemManager, guardian);
+                                systemObjects.add(account);
                         }
 
+                        // john
+                        guardian.setAccount(account);
+                        //
                         systemManager.setKidID(newKid);
                         ElectronicBracelet newElectronicBracelet = systemManager.create_electronicBracelet();
                         systemObjects.add(newElectronicBracelet);
@@ -80,6 +84,10 @@ public class Main
                         systemObjects.add(ticket);
                         ticket.setElectronicBracelet(newElectronicBracelet);
                         connectEbToKid(newElectronicBracelet, newKid);
+                        //john
+                        newElectronicBracelet.seteTicket(ticket);
+                        //
+
                         System.out.println("Now measure your kid please with the measure scale\n");
                         System.out.println("waiting...\n");
                         System.out.println("Enter kid's weight (kg): \n");
@@ -186,11 +194,17 @@ public class Main
                                     {
                                         String msg = device_choice + " has already been selected";
                                         System.out.println(msg);
+
+
                                         printFinalMessage = false;
                                         continue;
 
                                     }
                                     selectedDevices.add(device);
+                                    //john
+                                    Account a = guardian.getAccount();
+                                    a.updateEntries(kidID,device.getPrice());
+                                    //
                                 }
                             }
                             if (printFinalMessage)
@@ -202,6 +216,7 @@ public class Main
                                 {
                                     String msg = device_choice + " has been added to your selected rides";
                                     System.out.println(msg);
+
                                 }
                             }
                         }
@@ -220,12 +235,17 @@ public class Main
                                 {
                                     approvedDevice.add(device);
                                     System.out.println("entry has been added to " + device.getName());
+
                                 }
                             }
                             systemManager.addApprovedDevices(kidID, approvedDevice, account);
+
                             break;
 
                         }
+
+                        //john
+                        break;
                     }
 
                     case "Remove ride":
@@ -279,24 +299,97 @@ public class Main
 
                     case "Exit park":
                     case "5":
+
+
                         System.out.println("Please enter the kid's ID");
                         String kidID = myObj.nextLine();
-                        System.out.println("Please confirm that you returned the bracelet: yes/no");
-                        String returned = myObj.nextLine();
-                        while (!(Objects.equals(returned, "yes")))
-                        {
-                            System.out.println("Please confirm that you returned the bracelet: yes/no");
-                            returned = myObj.nextLine();
-                            System.out.println("thank you, goodbye");
-                            // TODO- remove from the bracelet list
 
+                        // checking if the kid exist
+                        Boolean kidRegistered = systemManager.checkForKid(kidID);
+                        if (!kidRegistered)
+                        {
+                            System.out.println("there's no kid register with that id." +
+                                    "you can register you kid by pressing 1");
+                            break;
                         }
+
+                        //get the kid to remove
+                        Kid removedKid = guardian.getKidByID(kidID);
+
+
+                        //check the balance
+                        System.out.println("checking balance...");
+                        Account account5 = guardian.getAccount();
+                        int balance = account5.getBalance(kidID);
+                        System.out.println("you have: " + guardian.getTopLimit());
+                        System.out.println("and you owe: " + balance);
+                        //you the balance is greater then the top limit
+                        if(balance > guardian.getTopLimit())
+                        {
+                            System.out.println("you owe more money then your top limit, please get more money");
+                            break;
+                        }
+                        System.out.println("succsess, deducing your total limit to: ");
+                        //update the top limit
+                        guardian.setTopLimit(guardian.getTopLimit() - balance);
+                        System.out.println(guardian.getTopLimit());
+                        // remove kid from guaridan list
+                        guardian.removeKid(removedKid);
+
+                        //remove from kid from SystemManger
+                        systemManager.removeKidsID(kidID);
+
+
+                        ElectronicBracelet eb = removedKid.getElectronicBracelet();
+
+                        // remove ticket for systemManager
+                        eTicket ticket = eb.geteTicket();
+                        systemManager.removeETicket(ticket);
+
+                        // remove bracelet from systemManager
+                        systemManager.removeBracelet(eb);
+
+                        //remove from all objects
+
+                        //remove kid
+                        if(systemObjects.contains(removedKid))
+                        {
+                            systemObjects.remove(removedKid);
+                        }
+
+                        //remove bracelet
+                        if(systemObjects.contains(eb))
+                        {
+                            systemObjects.remove(eb);
+                        }
+
+                        //remove ticket
+                        if(systemObjects.contains(ticket))
+                        {
+                            systemObjects.remove(ticket);
+                        }
+                        System.out.println("The kid has left the park");
+
+
+
+
+
+
 
                     case "exit":
                     case "6":
                     {
-                        break;
+
+                        for(Object obj : systemObjects)
+                        {
+                            if(systemObjects.contains(obj))
+                            {
+                                systemObjects.remove(obj);
+                            }
+                        }
+                        System.exit(0);
                     }
+                    System.out.println("All objects removed and system closed");
                 }
 
             }

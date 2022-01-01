@@ -22,6 +22,32 @@ public class SystemManager {
 
     }
 
+    public boolean removeETicket(eTicket ticket){
+        if(allETickets.contains(ticket))
+        {
+            allETickets.remove(ticket);
+            return true;
+        }
+        return false;
+    }
+    public boolean removeBracelet(ElectronicBracelet eb){
+        if(allBracelets.contains(eb))
+        {
+            allBracelets.remove(eb);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removeKidsID(String id){
+        if(allKidsID.contains(id))
+        {
+            allKidsID.remove(id);
+            return true;
+        }
+        return false;
+    }
+
     public ArrayList<Device> addEntryToTicket(String kid_id) {
         return getAllowedDevices(kid_id);
     }
