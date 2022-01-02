@@ -47,14 +47,25 @@ public class Main {
                             System.out.println("please enter numbers only");
                             break;
                         }
-                        int age = Integer.parseInt(kidAge);
+
+                        int age = 0;
+                        try
+                        {
+                            age = Integer.parseInt(kidAge);
+                        }
+                        catch (Exception exc)
+                        {
+                            System.out.println("please enter numbers only");
+                            break;
+                        }
+
                         if (age <= 0) {
                             System.out.println("please enter age above 0");
                             break;
                         }
 
                         System.out.println("checking details...\n");
-                        Kid newKid = fill_SignupForm(kidName, Integer.parseInt(kidAge), guardian);
+                        Kid newKid = fill_SignupForm(kidName, age, guardian);
                         if (newKid == null) {
                             break;
                         }
@@ -72,12 +83,33 @@ public class Main {
                                 System.out.println("topLimit cannot have characters");
                                 break;
                             }
-//                            if (Integer.parseInt(topLimit) < 10) {
-//                                System.out.println("Top limit must be at least 10");
-//                                break;
-//                            }
+
                             System.out.println("checking details...\n");
-                            boolean stat = creditInfo(Integer.parseInt(creditCard), Integer.parseInt(topLimit));
+
+                            int creditCardNum = 0;
+                            try
+                            {
+                                creditCardNum = Integer.parseInt(creditCard);
+                            }
+                            catch (Exception exc)
+                            {
+                                System.out.println("please enter numbers only");
+                                break;
+                            }
+
+                            int topLimitInt = 0;
+                            try
+                            {
+                                topLimitInt = Integer.parseInt(topLimit);
+                            }
+                            catch (Exception exc)
+                            {
+                                System.out.println("please enter numbers only");
+                                break;
+                            }
+
+
+                            boolean stat = creditInfo(creditCardNum, topLimitInt);
                             if (!stat) {
                                 systemObjects.remove(newKid);
                                 break; //TODO: need to delete child?
@@ -120,7 +152,31 @@ public class Main {
                             System.out.println("kidHeight cannot have characters");
                             break;
                         }
-                        guardian.setWeightAndHeight(Integer.parseInt(kidWeight), Integer.parseInt(kidHeight), newKid.getID());
+
+                        int kidWeightInt = 1;
+                        try
+                        {
+                            kidWeightInt = Integer.parseInt(kidWeight);
+                        }
+                        catch (Exception exc)
+                        {
+                            System.out.println("please enter numbers only");
+                            break;
+                        }
+
+                        int kidHeightInt = 1;
+                        try
+                        {
+                            kidHeightInt = Integer.parseInt(kidHeight);
+                        }
+                        catch (Exception exc)
+                        {
+                            System.out.println("please enter numbers only");
+                            break;
+                        }
+
+
+                        guardian.setWeightAndHeight(kidWeightInt, kidHeightInt, newKid.getID());
                         System.out.println(kidName + " was successfully registered !");
                         break;
                     }
