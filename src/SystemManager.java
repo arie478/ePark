@@ -98,7 +98,7 @@ public class SystemManager {
         {
             if(account.getBalance(kid_id) + device.getPrice() > account.getGuardian().getTopLimit())
             {
-                System.out.println("Adding the device " + device.getName() +" excceds your top limit");
+                System.out.println("Adding the device " + device.getName() +" exceeds your top limit");
             }
             else
             {

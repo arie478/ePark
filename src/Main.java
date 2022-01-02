@@ -184,6 +184,7 @@ public class Main {
                     /**
                      * Manage ticket
                      */
+                    case "Manage ticket":
                     case "2": {
                         System.out.println("Please enter your kid's id:\n");
                         String kidId = myObj.nextLine();
@@ -273,7 +274,7 @@ public class Main {
                                     selectedDevices.add(device);
                                     //john
                                     Account a = guardian.getAccount();
-                                    a.updateEntries(kidID, device.getPrice());
+//                                    a.updateEntries(kidID, device.getPrice());
                                     //
                                 }
                             }
