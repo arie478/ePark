@@ -283,8 +283,8 @@ public class SystemManager {
 
     }
 
-    public void addDevice(String name,Boolean isExtreme, ArrayList<Integer> restrictions, int price) {
-        allDevices.add(new Device(name, isExtreme, restrictions, price, this));
+    public void addDevice(Device device) {
+        allDevices.add(device);
     }
 
     public String getNewPassword(Guardian guardian) {

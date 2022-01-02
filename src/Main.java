@@ -146,7 +146,7 @@ public class Main {
                             System.out.printf("Successfully connected to %s's ticket\n", kidId);
                             systemManager.showTicket(kidId);
                         } else {
-                            System.out.printf("Wrong password for %s's ticket", kidId);
+                            System.out.printf("Wrong password for %s's ticket\n", kidId);
                         }
 
                         break;
@@ -391,41 +391,34 @@ public class Main {
     }
 
     private static void addDefaultDevices() {
-        Guardian gar = new Guardian();
-        Kid kid = new Kid(17, "adam", gar);
-        ElectronicBracelet elec = new ElectronicBracelet();
-        systemManager.create_eTicket("11", elec, systemManager);
-        elec.setKid(kid);
-        kid.setHeight(180);
-        kid.setWeight(50);
-//        eTicket ticket = new eTicket("11", elec, systemManager);
-//        ticket.getId();
-//        Account account = new Account(systemManager, gar);
-        systemManager.create_gAccount(gar);
-
-
-        kid.setID("1");
-
         ArrayList<Integer> mambaRestrictions = new ArrayList<>();
         mambaRestrictions.add(2147483647);
         mambaRestrictions.add(140);
         mambaRestrictions.add(12);
         int mambaRPrice = 50;
-        systemManager.addDevice("Mamba Ride", true, mambaRestrictions, mambaRPrice);
+        Device mamba = new Device("Mamba Ride", true, mambaRestrictions, mambaRPrice, systemManager );
+        systemManager.addDevice(mamba);
+        systemObjects.add(mamba);
 
         ArrayList<Integer> GiantWheelRestrictions = new ArrayList<>();
         GiantWheelRestrictions.add(2147483647);
         GiantWheelRestrictions.add(0);
         GiantWheelRestrictions.add(0);
         int wheelRPrice = 30;
-        systemManager.addDevice("Giant Wheel", false, GiantWheelRestrictions, wheelRPrice);
+        Device wheel = new Device("Giant Wheel", false, GiantWheelRestrictions, wheelRPrice, systemManager );
+        systemManager.addDevice(wheel);
+        systemObjects.add(wheel);
+
 
         ArrayList<Integer> CarrouselRestrictions = new ArrayList<>();
         CarrouselRestrictions.add(2147483647);
         CarrouselRestrictions.add(0);
         CarrouselRestrictions.add(8);
         int CarrouselPrice = 10;
-        systemManager.addDevice("Carrousel", false, CarrouselRestrictions, CarrouselPrice);
+        Device carrousel = new Device("Carrousel", false, CarrouselRestrictions, CarrouselPrice, systemManager );
+        systemManager.addDevice(carrousel);
+        systemObjects.add(carrousel);
+
     }
 
     private static void connectEbToKid(ElectronicBracelet newElectronicBracelet, Kid newKid) {
