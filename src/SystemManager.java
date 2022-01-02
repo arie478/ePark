@@ -2,11 +2,11 @@ import java.security.spec.RSAOtherPrimeInfo;
 import java.util.*;
 
 public class SystemManager {
-    private ArrayList<eTicket> allETickets; //TODO- needs to add when adding kid
-    private ArrayList<ElectronicBracelet> allBracelets; //TODO: connect to kid
-    private ArrayList<Device> allDevices; //TODO- add
-    private ArrayList<Account> allAccounts; //TODO: add
-    private ArrayList<Guardian> allGuards; //TODO: add
+    private ArrayList<eTicket> allETickets;
+    private ArrayList<ElectronicBracelet> allBracelets;
+    private ArrayList<Device> allDevices;
+    private ArrayList<Account> allAccounts;
+    private ArrayList<Guardian> allGuards;
     private ArrayList<String> allKidsID;
     private HashMap<Guardian,ArrayList<String> >allPassword;
 
@@ -106,7 +106,7 @@ public class SystemManager {
             }
         }
         ticket.addEntries(devicesToAdd);
-        account.addEntries(devicesToAdd);
+        account.addEntries(kid_id, devicesToAdd);
     }
 
 
@@ -116,7 +116,7 @@ public class SystemManager {
     public void removeEntryFromDevices(String kid_id, ArrayList<Device> devices, Account account) {
         eTicket ticket = getTicketFromId(kid_id);
         ticket.removeEntries(devices);
-        account.removeEntries(devices);
+        account.removeEntries(kid_id, devices);
     }
 
 
@@ -237,7 +237,7 @@ public class SystemManager {
 
     public void deleteEticket(eTicket eTicket) {
         allETickets.remove(eTicket);
-        //TODO: check if more actions needed
+
 
     }
 

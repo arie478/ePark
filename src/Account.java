@@ -5,7 +5,7 @@ import java.util.Map;
 public class Account
 {
     // Attributes
-    private Map<String, Integer> totalPurchases; //TODO:
+    private Map<String, Integer> totalPurchases;
 
     // Attributes from association
     private SystemManager systemManager;
@@ -69,11 +69,34 @@ public class Account
         totalPurchases.remove(kidId);
     }
 
-    public void addEntries(ArrayList<Device> devices){
-        // TODO: check & implement
+    public void addEntries(String kidId, ArrayList<Device> devices){
+        Integer sum_to_add = 0;
+        for (Device device: devices){
+            sum_to_add += device.getPrice();
+        }
+        Integer current_sum = totalPurchases.get(kidId);
+        if (current_sum == null){
+            totalPurchases.put(kidId,sum_to_add);
+        }
+        else {
+            totalPurchases.put(kidId, current_sum + sum_to_add);
+        }
+
     }
-    public void removeEntries(ArrayList<Device> devices){
-        // TODO: check & implement
+    public void removeEntries(String kidId, ArrayList<Device> devices){
+        Integer sum_to_remove = 0;
+        for (Device device: devices){
+            sum_to_remove += device.getPrice();
+        }
+        Integer current_sum = totalPurchases.get(kidId);
+        if (current_sum == null){
+            totalPurchases.put(kidId,0);
+        }
+        else {
+            totalPurchases.put(kidId,current_sum -  sum_to_remove);
+
+        }
+
     }
 
     public Guardian getGuardian(){

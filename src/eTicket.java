@@ -85,7 +85,7 @@ public class eTicket {
         });
     }
 
-    public String getKidId(){ //TODO: check if needed
+    public String getKidId(){
         return electronicBracelet.getKid().getID();
     }
 

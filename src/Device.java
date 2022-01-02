@@ -84,7 +84,6 @@ public class Device
     public Boolean checkIfAllowed(ArrayList<Integer> kidMeasurements)
     {
         // Check if weight is under limit, height and age are above limit
-        // TODO: check the parameter
         return kidMeasurements.get(0) <= restrictions.get(0) && kidMeasurements.get(1) >= restrictions.get(1) && kidMeasurements.get(2) >= restrictions.get(2);
     }
 

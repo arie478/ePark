@@ -6,7 +6,7 @@ public class Main {
     private static Guardian guardian;
     private static Account account;
 
-    public static List<Object> systemObjects; //TODO: add/remove all objects to list
+    public static List<Object> systemObjects;
 
 
     public static void getUSerInput() {
@@ -112,7 +112,7 @@ public class Main {
                             boolean stat = creditInfo(creditCardNum, topLimitInt);
                             if (!stat) {
                                 systemObjects.remove(newKid);
-                                break; //TODO: need to delete child?
+                                break;
                             }
 
 
