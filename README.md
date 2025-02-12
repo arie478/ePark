@@ -2,7 +2,7 @@
 
 ##  Project Overview
 
-This project was made as part of a database management course.
+This project was made as part of a Analysis and Design of Software Systems course.
 
 **ePark** is a comprehensive park management system designed to enhance the experience for parents and guardians visiting theme parks with their children. This project provides an intuitive console-based interface for managing children’s park activities, from registering children and managing ride tickets to monitoring their activities with electronic bracelets.
 
